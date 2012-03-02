@@ -1671,11 +1671,7 @@ netField_t      playerStateFields[] = {
 	,
 	{PSF(Ammo), 12}
 	,
-	{PSF(clips), 4}
-	,
 	{PSF(tauntTimer), 12}
-	,
-	{PSF(weaponAnim), 12}
 	,
 	{PSF(otherEntityNum), 10}
 	,
