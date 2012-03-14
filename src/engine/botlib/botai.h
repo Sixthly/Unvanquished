@@ -2,9 +2,9 @@
 ===========================================================================
 
 Daemon GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Daemon GPL Source Code (Daemon Source Code).  
+This file is part of the Daemon GPL Source Code (Daemon Source Code).
 
 Daemon Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,14 +19,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Daemon Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the Daemon Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following the 
-terms and conditions of the GNU General Public License which accompanied the Daemon 
-Source Code.  If not, please request a copy in writing from id Software at the address 
+In addition, the Daemon Source Code is also subject to certain additional terms.
+You should have received a copy of these additional terms immediately following the
+terms and conditions of the GNU General Public License which accompanied the Daemon
+Source Code.  If not, please request a copy in writing from id Software at the address
 below.
 
-If you have questions concerning this license or the applicable additional terms, you 
-may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, 
+If you have questions concerning this license or the applicable additional terms, you
+may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville,
 Maryland 20850 USA.
 
 ===========================================================================
@@ -80,37 +80,37 @@ typedef struct bsp_surface_s
 //a trace is returned when a box is swept through the world
 typedef struct bsp_trace_s
 {
-	qboolean        allsolid;	// if true, plane is not valid
-	qboolean        startsolid;	// if true, the initial point was in a solid area
-	float           fraction;	// time completed, 1.0 = didn't hit anything
-	vec3_t          endpos;		// final position
-	cplane_t        plane;		// surface normal at impact
-	float           exp_dist;	// expanded plane distance
-	int             sidenum;	// number of the brush side hit
-	bsp_surface_t   surface;	// the hit point surface
-	int             contents;	// contents on other side of surface hit
-	int             ent;		// number of entity hit
+	qboolean        allsolid;   // if true, plane is not valid
+	qboolean        startsolid; // if true, the initial point was in a solid area
+	float           fraction;   // time completed, 1.0 = didn't hit anything
+	vec3_t          endpos;     // final position
+	cplane_t        plane;      // surface normal at impact
+	float           exp_dist;   // expanded plane distance
+	int             sidenum;    // number of the brush side hit
+	bsp_surface_t   surface;    // the hit point surface
+	int             contents;   // contents on other side of surface hit
+	int             ent;        // number of entity hit
 } bsp_trace_t;
 
 #define BSPTRACE
-#endif							// BSPTRACE
+#endif                          // BSPTRACE
 
 //
 // imported functions used for the BotAI
 //
 
-
 // from the server
+
 /*
-void	trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value, int flags );
-void	trap_Cvar_Update( vmCvar_t *cvar );
-void	trap_Cvar_Set( const char *var_name, const char *value );
-int		trap_Cvar_VariableIntegerValue( const char *var_name );
-void	trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
-void	trap_GetConfigstring( int num, char *buffer, int bufferSize );
-void	trap_GetServerinfo( char *buffer, int bufferSize );
-int		trap_PointContents( const vec3_t point, int passEntityNum );
+void    trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value, int flags );
+void    trap_Cvar_Update( vmCvar_t *cvar );
+void    trap_Cvar_Set( const char *var_name, const char *value );
+int     trap_Cvar_VariableIntegerValue( const char *var_name );
+void    trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+void    trap_GetConfigstring( int num, char *buffer, int bufferSize );
+void    trap_GetServerinfo( char *buffer, int bufferSize );
+int     trap_PointContents( const vec3_t point, int passEntityNum );
 qboolean trap_InPVS( const vec3_t p1, const vec3_t p2 );
-int		trap_BotAllocateClient( int clientNum );
-void	trap_BotFreeClient( int clientNum );
+int     trap_BotAllocateClient( int clientNum );
+void    trap_BotFreeClient( int clientNum );
 */

@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-
 /*
  * ALIEN weapons
  *
@@ -33,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_WDMG_MODIFIER         1.0f
-#define ADM(d)                      ((int)((float)d*ALIEN_WDMG_MODIFIER))
+#define ADM(d)                      ((int)((float)d * ALIEN_WDMG_MODIFIER ))
 
 #define ABUILDER_BUILD_REPEAT       500
 #define ABUILDER_CLAW_DMG           ADM(20)
@@ -61,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LEVEL1_CLAW_U_REPEAT        500
 #define LEVEL1_CLAW_K_SCALE         1.0f
 #define LEVEL1_CLAW_U_K_SCALE       1.0f
-#define LEVEL1_GRAB_RANGE           80.0f // Whales: Claw and grab range normalized. 
+#define LEVEL1_GRAB_RANGE           80.0f // Whales: Claw and grab range normalized.
 #define LEVEL1_GRAB_U_RANGE         LEVEL1_GRAB_RANGE + 3.0f
 #define LEVEL1_GRAB_TIME            300
 #define LEVEL1_GRAB_U_TIME          300
@@ -94,7 +93,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define LEVEL3_CLAW_DMG             ADM(80)
 #define LEVEL3_CLAW_RANGE           82.0f // Whales: Increased claw range
-#define LEVEL3_CLAW_UPG_RANGE       LEVEL3_CLAW_RANGE + 3.0f          
+#define LEVEL3_CLAW_UPG_RANGE       LEVEL3_CLAW_RANGE + 3.0f
 #define LEVEL3_CLAW_WIDTH           13.5f // Whales: Increased claw width
 #define LEVEL3_CLAW_REPEAT          750 // Whales: Lowered repeat
 #define LEVEL3_CLAW_K_SCALE         1.0f
@@ -106,10 +105,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LEVEL3_POUNCE_WIDTH         12.0f // Whales: Pounce width narrowed. May scale this down even further.
 #define LEVEL3_POUNCE_TIME          700      // Whales: Reduced this by 100ms, may need nerfing.
 #define LEVEL3_POUNCE_TIME_UPG      700      // Whales: Evened with standard goon. I'd like to keep this here even if standard goon charge time is raised.
-#define LEVEL3_POUNCE_TIME_MIN      200      // msec before which pounce cancels  
+#define LEVEL3_POUNCE_TIME_MIN      200      // msec before which pounce cancels
 #define LEVEL3_POUNCE_REPEAT        400      // msec before a new pounce starts
 #define LEVEL3_POUNCE_SPEED_MOD     0.85f    // Whales: Reduced the slowdown from a charged pounce by 0.10
-#define LEVEL3_POUNCE_JUMP_MAG      750      // Whales: Raised by 50, 
+#define LEVEL3_POUNCE_JUMP_MAG      750      // Whales: Raised by 50,
 #define LEVEL3_POUNCE_JUMP_MAG_UPG  850      // Whales: Raised by 50.
 #define LEVEL3_BOUNCEBALL_DMG       ADM(110)
 #define LEVEL3_BOUNCEBALL_REPEAT    1200
@@ -148,69 +147,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_HLTH_MODIFIER         1.0f
-#define AHM(h)                      ((int)((float)h*ALIEN_HLTH_MODIFIER))
+#define AHM(h)                      ((int)((float)h * ALIEN_HLTH_MODIFIER ))
 
 #define ALIEN_VALUE_MODIFIER        1.0f
-#define AVM(h)                      ((int)((float)h*ALIEN_VALUE_MODIFIER))
+#define AVM(h)                      ((int)((float)h * ALIEN_VALUE_MODIFIER ))
 
 #define ABUILDER_SPEED              0.9f
 #define ABUILDER_VALUE              AVM(240)
 #define ABUILDER_HEALTH             AHM(50)
-#define ABUILDER_REGEN              (0.04f * ABUILDER_HEALTH)
+#define ABUILDER_REGEN              ( 0.04f * ABUILDER_HEALTH )
 #define ABUILDER_COST               0
 
 #define ABUILDER_UPG_SPEED          0.9f
 #define ABUILDER_UPG_VALUE          AVM(300)
 #define ABUILDER_UPG_HEALTH         AHM(75)
-#define ABUILDER_UPG_REGEN          (0.04f * ABUILDER_UPG_HEALTH)
+#define ABUILDER_UPG_REGEN          ( 0.04f * ABUILDER_UPG_HEALTH )
 #define ABUILDER_UPG_COST           0
 
 #define LEVEL0_SPEED                1.4f
 #define LEVEL0_VALUE                AVM(180)
 #define LEVEL0_HEALTH               AHM(25)
-#define LEVEL0_REGEN                (0.05f * LEVEL0_HEALTH)
+#define LEVEL0_REGEN                ( 0.05f * LEVEL0_HEALTH )
 #define LEVEL0_COST                 0
 
 #define LEVEL1_SPEED                1.25f
 #define LEVEL1_VALUE                AVM(270)
 #define LEVEL1_HEALTH               AHM(60)
-#define LEVEL1_REGEN                (0.03f * LEVEL1_HEALTH)
+#define LEVEL1_REGEN                ( 0.03f * LEVEL1_HEALTH )
 #define LEVEL1_COST                 1
 
 #define LEVEL1_UPG_SPEED            1.25f
 #define LEVEL1_UPG_VALUE            AVM(330)
 #define LEVEL1_UPG_HEALTH           AHM(80)
-#define LEVEL1_UPG_REGEN            (0.03f * LEVEL1_UPG_HEALTH)
+#define LEVEL1_UPG_REGEN            ( 0.03f * LEVEL1_UPG_HEALTH )
 #define LEVEL1_UPG_COST             1
 
 #define LEVEL2_SPEED                1.2f
 #define LEVEL2_VALUE                AVM(420)
 #define LEVEL2_HEALTH               AHM(150)
-#define LEVEL2_REGEN                (0.03f * LEVEL2_HEALTH)
+#define LEVEL2_REGEN                ( 0.03f * LEVEL2_HEALTH )
 #define LEVEL2_COST                 1
 
 #define LEVEL2_UPG_SPEED            1.2f
 #define LEVEL2_UPG_VALUE            AVM(540)
 #define LEVEL2_UPG_HEALTH           AHM(175)
-#define LEVEL2_UPG_REGEN            (0.03f * LEVEL2_UPG_HEALTH)
+#define LEVEL2_UPG_REGEN            ( 0.03f * LEVEL2_UPG_HEALTH )
 #define LEVEL2_UPG_COST             1
 
 #define LEVEL3_SPEED                1.2f // Whales: Raised goon speed by .1 to match backpedalling humans. May need nerf.
 #define LEVEL3_VALUE                AVM(600)
 #define LEVEL3_HEALTH               AHM(200)
-#define LEVEL3_REGEN                (0.03f * LEVEL3_HEALTH)
+#define LEVEL3_REGEN                ( 0.03f * LEVEL3_HEALTH )
 #define LEVEL3_COST                 1
 
-#define LEVEL3_UPG_SPEED            1.2f // Whales: Raised by .1 to match standard goon. 
+#define LEVEL3_UPG_SPEED            1.2f // Whales: Raised by .1 to match standard goon.
 #define LEVEL3_UPG_VALUE            AVM(720)
 #define LEVEL3_UPG_HEALTH           AHM(250)
-#define LEVEL3_UPG_REGEN            (0.03f * LEVEL3_UPG_HEALTH)
+#define LEVEL3_UPG_REGEN            ( 0.03f * LEVEL3_UPG_HEALTH )
 #define LEVEL3_UPG_COST             1
 
 #define LEVEL4_SPEED                1.1f // Whales: Lowered by .1
 #define LEVEL4_VALUE                AVM(960)
 #define LEVEL4_HEALTH               AHM(350)
-#define LEVEL4_REGEN                (0.025f * LEVEL4_HEALTH)
+#define LEVEL4_REGEN                ( 0.025f * LEVEL4_HEALTH )
 #define LEVEL4_COST                 2
 
 /*
@@ -228,9 +227,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_BHLTH_MODIFIER        1.0f
-#define ABHM(h)                     ((int)((float)h*ALIEN_BHLTH_MODIFIER))
+#define ABHM(h)                     ((int)((float)h * ALIEN_BHLTH_MODIFIER ))
 #define ALIEN_BVALUE_MODIFIER       90.0f
-#define ABVM(h)                     ((int)((float)h*ALIEN_BVALUE_MODIFIER))
+#define ABVM(h)                     ((int)((float)h * ALIEN_BVALUE_MODIFIER ))
 
 #define CREEP_BASESIZE              700
 #define CREEP_TIMEOUT               1000
@@ -340,15 +339,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ALIEN_POISON_TIME           10000
 #define ALIEN_POISON_DMG            5
-#define ALIEN_POISON_DIVIDER        (1.0f/1.32f) //about 1.0/(time`th root of damage)
+#define ALIEN_POISON_DIVIDER        ( 1.0f / 1.32f ) //about 1.0/(time`th root of damage)
 
 #define ALIEN_SPAWN_REPEAT_TIME     10000
 
 #define ALIEN_REGEN_DAMAGE_TIME     2000 //msec since damage that regen starts again
-#define ALIEN_REGEN_NOCREEP_MOD     (1.0f/3.0f) //regen off creep
+#define ALIEN_REGEN_NOCREEP_MOD     ( 1.0f / 3.0f ) //regen off creep
 
 #define ALIEN_MAX_FRAGS             9
-#define ALIEN_MAX_CREDITS           (ALIEN_MAX_FRAGS*ALIEN_CREDITS_PER_KILL)
+#define ALIEN_MAX_CREDITS           ( ALIEN_MAX_FRAGS * ALIEN_CREDITS_PER_KILL )
 #define ALIEN_CREDITS_PER_KILL      400
 #define ALIEN_TK_SUICIDE_PENALTY    350
 
@@ -364,7 +363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define HUMAN_WDMG_MODIFIER         1.0f
-#define HDM(d)                      ((int)((float)d*HUMAN_WDMG_MODIFIER))
+#define HDM(d)                      ((int)((float)d * HUMAN_WDMG_MODIFIER ))
 
 #define BLASTER_REPEAT              600
 #define BLASTER_K_SCALE             1.0f
@@ -379,7 +378,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define RIFLE_K_SCALE               1.0f
 #define RIFLE_RELOAD                2000
 #define RIFLE_PRICE                 0
-#define RIFLE_SPREAD                250 // Whales: Raised by 50. 
+#define RIFLE_SPREAD                250 // Whales: Raised by 50.
 #define RIFLE_DMG                   HDM(5)
 
 #define PAINSAW_PRICE               100
@@ -406,7 +405,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SHOTGUN_RELOAD              2000
 #define SHOTGUN_SPREAD              700
 #define SHOTGUN_DMG                 HDM(5)
-#define SHOTGUN_RANGE               (8192 * 12)
+#define SHOTGUN_RANGE               ( 8192 * 12 )
 
 #define LASGUN_PRICE                250
 #define LASGUN_AMMO                 200
@@ -528,9 +527,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define HUMAN_BHLTH_MODIFIER        1.0f
-#define HBHM(h)                     ((int)((float)h*HUMAN_BHLTH_MODIFIER))
+#define HBHM(h)                     ((int)((float)h * HUMAN_BHLTH_MODIFIER ))
 #define HUMAN_BVALUE_MODIFIER       240.0f
-#define HBVM(h)                     ((int)((float)h*(float)HUMAN_BVALUE_MODIFIER)) // remember these are measured in credits not frags (c.f. ALIEN_CREDITS_PER_KILL)
+#define HBVM(h)                     ((int)((float)h * (float)HUMAN_BVALUE_MODIFIER )) // remember these are measured in credits not frags (c.f. ALIEN_CREDITS_PER_KILL)
 
 #define REACTOR_BASESIZE            1000
 #define REPEATER_BASESIZE           500
@@ -656,7 +655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MIN_FALL_DISTANCE           30.0f //the fall distance at which fall damage kicks in
 #define MAX_FALL_DISTANCE           120.0f //the fall distance at which maximum damage is dealt
-#define AVG_FALL_DISTANCE           ((MIN_FALL_DISTANCE+MAX_FALL_DISTANCE)/2.0f)
+#define AVG_FALL_DISTANCE           (( MIN_FALL_DISTANCE + MAX_FALL_DISTANCE ) / 2.0f )
 
 #define DEFAULT_FREEKILL_PERIOD     "120" //seconds
 #define FREEKILL_ALIEN              ALIEN_CREDITS_PER_KILL
@@ -677,6 +676,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define DEFAULT_HUMAN_MAX_STAGE     "2"
 
 #define DAMAGE_FRACTION_FOR_KILL    0.5f //how much damage players (versus structures) need to
-                                         //do to increment the stage kill counters
-                                         
+//do to increment the stage kill counters
+
 #define MAXIMUM_BUILD_TIME          20000 // used for pie timer

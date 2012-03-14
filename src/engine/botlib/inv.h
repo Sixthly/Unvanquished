@@ -2,9 +2,9 @@
 ===========================================================================
 
 Daemon GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Daemon GPL Source Code (Daemon Source Code).  
+This file is part of the Daemon GPL Source Code (Daemon Source Code).
 
 Daemon Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,26 +19,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Daemon Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the Daemon Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following the 
-terms and conditions of the GNU General Public License which accompanied the Daemon 
-Source Code.  If not, please request a copy in writing from id Software at the address 
+In addition, the Daemon Source Code is also subject to certain additional terms.
+You should have received a copy of these additional terms immediately following the
+terms and conditions of the GNU General Public License which accompanied the Daemon
+Source Code.  If not, please request a copy in writing from id Software at the address
 below.
 
-If you have questions concerning this license or the applicable additional terms, you 
-may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, 
+If you have questions concerning this license or the applicable additional terms, you
+may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville,
 Maryland 20850 USA.
 
 ===========================================================================
 */
 
 /*
- * name:		inv.h
+ * name:        inv.h
  *
  * desc:
  *
 */
-
 
 #define INVENTORY_NONE              0
 //armor
@@ -62,7 +61,6 @@ Maryland 20850 USA.
 #define INVENTORY_PLIERS            23
 #define INVENTORY_SMOKE_GRENADE     24
 
-
 // please leave these open up to 27 (INVENTORY_9MM) (and double check defines when merging)
 // the inventory max (MAX_ITEMS) is 256, so we aren't too concerned about running out of space
 
@@ -76,7 +74,6 @@ Maryland 20850 USA.
 #define INVENTORY_DYNAMITE_AMMO     37
 // Mad Doc - TDF
 // @TODO make an inventory for whatever we decide to use for BAR ammo. Bots can't use M1?
-
 
 // please leave these open up to 48 (INVENTORY_HEALTH) (and double check defines when merging)
 // the inventory max (MAX_ITEMS) is 256, so we aren't too concerned about running out of space
@@ -92,7 +89,6 @@ Maryland 20850 USA.
 #define INVENTORY_FLIGHT            56
 #define INVENTORY_REDFLAG           57
 #define INVENTORY_BLUEFLAG          58
-
 
 //enemy stuff
 #define ENEMY_HORIZONTAL_DIST       200

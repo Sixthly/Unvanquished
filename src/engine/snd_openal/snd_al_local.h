@@ -43,9 +43,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifdef _WIN32
 #define DLLEXPORT __declspec(dllexport)
 #define DLLLOCAL
-#elif (__GNUC__ >= 4) && defined __ELF__
-#define DLLEXPORT __attribute__ ((visibility("default")))
-#define DLLLOCAL __attribute__ ((visibility("hidden")))
+#elif ( __GNUC__ >= 4 ) && defined __ELF__
+#define DLLEXPORT __attribute__ (( visibility("default")))
+#define DLLLOCAL __attribute__ (( visibility("hidden")))
 #else
 #define DLLEXPORT
 #define DLLLOCAL
@@ -74,12 +74,12 @@ extern cvar_t *s_rolloff;
 /**
  * Util
  */
-ALuint al_format(int width, int channels);
+ALuint al_format( int width, int channels );
 
 /**
  * Error messages
  */
-char *al_errormsg(ALenum error);
+char *al_errormsg( ALenum error );
 
 /**
  * Buffer management
@@ -91,19 +91,19 @@ void al_buf_shutdown( void );
 // Register and unregister sound effects
 // If s_precache is 0, sound files will be loaded when they are used
 // Otherwise, they will be loaded on registration
-sfxHandle_t al_buf_register(const char *filename);
+sfxHandle_t al_buf_register( const char *filename );
 
 // Set up a sound effect for usage
 // This reloads the sound effect if necessary, and keeps track of it's usage
-void al_buf_use(sfxHandle_t sfx);
+void al_buf_use( sfxHandle_t sfx );
 
 // Internal use - actually allocates and deallocates the buffers
-void al_buf_load(sfxHandle_t sfx);
-void al_buf_unload(sfxHandle_t sfx);
+void al_buf_load( sfxHandle_t sfx );
+void al_buf_unload( sfxHandle_t sfx );
 qboolean al_buf_evict( void );
 
 // Grabs the OpenAL buffer from a sfxHandle_t
-ALuint al_buf_get(sfxHandle_t sfx);
+ALuint al_buf_get( sfxHandle_t sfx );
 
 /**
  * Source management
@@ -112,14 +112,14 @@ ALuint al_buf_get(sfxHandle_t sfx);
  * cause loss - they will resume as soon as a channel is available.
  * One-shot sounds will be lost if there are insufficient channels.
  */
-#define SRCPRI_AMBIENT	0	// Ambient sound effects
-#define SRCPRI_ENTITY	1	// Entity sound effects
-#define SRCPRI_ONESHOT	2	// One-shot sounds
-#define SRCPRI_LOCAL	3	// Local sounds
-#define SRCPRI_STREAM	4	// Streams (music, cutscenes)
+#define SRCPRI_AMBIENT  0   // Ambient sound effects
+#define SRCPRI_ENTITY   1   // Entity sound effects
+#define SRCPRI_ONESHOT  2   // One-shot sounds
+#define SRCPRI_LOCAL    3   // Local sounds
+#define SRCPRI_STREAM   4   // Streams (music, cutscenes)
 
-#define SRC_NO_ENTITY	-1	// Has no associated entity
-#define SRC_NO_CHANNEL	-1	// Has no specific channel
+#define SRC_NO_ENTITY   -1  // Has no associated entity
+#define SRC_NO_CHANNEL  -1  // Has no specific channel
 
 typedef int srcHandle_t;
 
@@ -130,34 +130,34 @@ void al_src_shutdown( void );
 // Finds a free sound source
 // If required, this will kick a sound off
 // If you don't use it immediately, it may still be reallocated
-srcHandle_t al_src_alloc(int priority, int entnum, int channel);
+srcHandle_t al_src_alloc( int priority, int entnum, int channel );
 
 // Finds an active source with matching entity and channel numbers
 // Returns -1 if there isn't one
-srcHandle_t al_src_find(int entnum, int channel);
+srcHandle_t al_src_find( int entnum, int channel );
 
 // Locks and unlocks a source
 // Locked sources will not be automatically reallocated or managed
 // Once unlocked, the source may be reallocated again
-void al_src_lock(srcHandle_t src);
-void al_src_unlock(srcHandle_t src);
+void al_src_lock( srcHandle_t src );
+void al_src_unlock( srcHandle_t src );
 
 // Entity position management
-void al_src_entity_move(int entnum, const vec3_t origin);
+void al_src_entity_move( int entnum, const vec3_t origin );
 
 // Local sound effect
-void al_src_local(sfxHandle_t sfx, int channel);
+void al_src_local( sfxHandle_t sfx, int channel );
 
 // Play a one-shot sound effect
-void al_src_play(sfxHandle_t sfx, vec3_t origin, int entnum, int entchannel);
+void al_src_play( sfxHandle_t sfx, vec3_t origin, int entnum, int entchannel );
 
 // Start a looping sound effect
 void al_src_loop_clear( void );
-void al_src_loop(int priority, sfxHandle_t sfx, const vec3_t origin, const vec3_t velocity, int entnum);
-void al_src_loop_stop(int entnum);
+void al_src_loop( int priority, sfxHandle_t sfx, const vec3_t origin, const vec3_t velocity, int entnum );
+void al_src_loop_stop( int entnum );
 
 // Sound duration
-int al_duration (sfxHandle_t sfx);
+int al_duration ( sfxHandle_t sfx );
 
 // Update state (move things around, manage sources, and so on)
 void al_src_update( void );
@@ -166,7 +166,7 @@ void al_src_update( void );
 void al_src_shutup( void );
 
 // Grab the raw source object
-ALuint al_src_get(srcHandle_t src);
+ALuint al_src_get( srcHandle_t src );
 
 /**
  * Music
@@ -178,8 +178,8 @@ void al_mus_update( void );
 /**
  * Stream
  */
-void al_stream_raw(int samples, int rate, int width, int channels,
-		   const byte *data, float volume);
+void al_stream_raw( int samples, int rate, int width, int channels,
+                    const byte *data, float volume );
 void al_stream_update( void );
 void al_stream_die( void );
 
@@ -189,18 +189,19 @@ void al_stream_die( void );
 extern sndexport_t se;
 extern sndimport_t si;
 
-qboolean SndAl_Init(void);
-void SndAl_Shutdown(void);
+qboolean SndAl_Init( void );
+void SndAl_Shutdown( void );
 void SndAl_StartSound( vec3_t origin, int entnum, int entchannel, sfxHandle_t sfx );
 void SndAl_StartLocalSound( sfxHandle_t sfx, int channelNum );
 void SndAl_StartBackgroundTrack( const char *intro, const char *loop );
 void SndAl_StopBackgroundTrack( void );
-void SndAl_RawSamples(int stream, int samples, int rate, int width, int channels, const byte *data, float volume, int entityNum);
+void SndAl_RawSamples( int stream, int samples, int rate, int width, int channels, const byte *data, float volume, int entityNum );
 void SndAl_StopAllSounds( void );
 void SndAl_ClearLoopingSounds( qboolean killall );
 void SndAl_AddLoopingSound( int entityNum, const vec3_t origin, const vec3_t velocity, sfxHandle_t sfx );
 void SndAl_AddRealLoopingSound( int entityNum, const vec3_t origin, const vec3_t velocity, sfxHandle_t sfx );
-void SndAl_StopLoopingSound(int entityNum );
+void SndAl_StopLoopingSound( int entityNum );
+
 void SndAl_Respatialize( int entityNum, const vec3_t origin, vec3_t axis[3], int inwater );
 void SndAl_UpdateEntityPosition( int entityNum, const vec3_t origin );
 void SndAl_Update( void );
@@ -220,4 +221,5 @@ int SndAl_AvailableCaptureSamples( void );
 void SndAl_Capture( int samples, byte *data );
 void SndAl_StopCapture( void );
 void SndAl_MasterGain( float gain );
+
 #endif

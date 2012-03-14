@@ -23,14 +23,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // tr_image.c
 #include "tr_local.h"
 
-
-
 /*
 =============
 LoadTGA
 =============
 */
-void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaByte)
+void LoadTGA( const char *name, byte **pic, int *width, int *height, byte alphaByte )
 {
 	int             columns, rows, numPixels;
 	byte           *pixbuf;
@@ -45,8 +43,9 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 	//
 	// load the file
 	//
-	ri.FS_ReadFile((char *)name, (void **)&buffer);
-	if(!buffer)
+	ri.FS_ReadFile( ( char * )name, ( void ** )&buffer );
+
+	if ( !buffer )
 	{
 		return;
 	}
@@ -57,72 +56,79 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 	targa_header.colormap_type = *buf_p++;
 	targa_header.image_type = *buf_p++;
 
-	targa_header.colormap_index = LittleShort(*(short *)buf_p);
+	targa_header.colormap_index = LittleShort( *( short * )buf_p );
 	buf_p += 2;
-	targa_header.colormap_length = LittleShort(*(short *)buf_p);
+	targa_header.colormap_length = LittleShort( *( short * )buf_p );
 	buf_p += 2;
 	targa_header.colormap_size = *buf_p++;
-	targa_header.x_origin = LittleShort(*(short *)buf_p);
+	targa_header.x_origin = LittleShort( *( short * )buf_p );
 	buf_p += 2;
-	targa_header.y_origin = LittleShort(*(short *)buf_p);
+	targa_header.y_origin = LittleShort( *( short * )buf_p );
 	buf_p += 2;
-	targa_header.width = LittleShort(*(short *)buf_p);
+	targa_header.width = LittleShort( *( short * )buf_p );
 	buf_p += 2;
-	targa_header.height = LittleShort(*(short *)buf_p);
+	targa_header.height = LittleShort( *( short * )buf_p );
 	buf_p += 2;
 	targa_header.pixel_size = *buf_p++;
 	targa_header.attributes = *buf_p++;
 
-	if(targa_header.image_type != 2 && targa_header.image_type != 10 && targa_header.image_type != 3)
+	if ( targa_header.image_type != 2 && targa_header.image_type != 10 && targa_header.image_type != 3 )
 	{
-		ri.Error(ERR_DROP, "LoadTGA: Only type 2 (RGB), 3 (gray), and 10 (RGB) TGA images supported (%s)\n", name);
+		ri.Error( ERR_DROP, "LoadTGA: Only type 2 (RGB), 3 (gray), and 10 (RGB) TGA images supported (%s)\n", name );
 	}
 
-	if(targa_header.colormap_type != 0)
+	if ( targa_header.colormap_type != 0 )
 	{
-		ri.Error(ERR_DROP, "LoadTGA: colormaps not supported (%s)\n", name);
+		ri.Error( ERR_DROP, "LoadTGA: colormaps not supported (%s)\n", name );
 	}
 
-	if((targa_header.pixel_size != 32 && targa_header.pixel_size != 24) && targa_header.image_type != 3)
+	if ( ( targa_header.pixel_size != 32 && targa_header.pixel_size != 24 ) && targa_header.image_type != 3 )
 	{
-		ri.Error(ERR_DROP, "LoadTGA: Only 32 or 24 bit images supported (no colormaps) (%s)\n", name);
+		ri.Error( ERR_DROP, "LoadTGA: Only 32 or 24 bit images supported (no colormaps) (%s)\n", name );
 	}
 
 	columns = targa_header.width;
 	rows = targa_header.height;
 	numPixels = columns * rows * 4;
 
-	if(width)
-		*width = columns;
-	if(height)
-		*height = rows;
-
-	if(!columns || !rows || numPixels > 0x7FFFFFFF || numPixels / columns / 4 != rows)
+	if ( width )
 	{
-		ri.Error(ERR_DROP, "LoadTGA: %s has an invalid image size\n", name);
+		*width = columns;
 	}
 
-	targa_rgba = ri.Z_Malloc(numPixels);
+	if ( height )
+	{
+		*height = rows;
+	}
+
+	if ( !columns || !rows || numPixels > 0x7FFFFFFF || numPixels / columns / 4 != rows )
+	{
+		ri.Error( ERR_DROP, "LoadTGA: %s has an invalid image size\n", name );
+	}
+
+	targa_rgba = ri.Z_Malloc( numPixels );
 
 	*pic = targa_rgba;
 
-	if(targa_header.id_length != 0)
-		buf_p += targa_header.id_length;	// skip TARGA image comment
+	if ( targa_header.id_length != 0 )
+	{
+		buf_p += targa_header.id_length;    // skip TARGA image comment
+	}
 
-	if(targa_header.image_type == 2 || targa_header.image_type == 3)
+	if ( targa_header.image_type == 2 || targa_header.image_type == 3 )
 	{
 		// Uncompressed RGB or gray scale image
-		for(row = rows - 1; row >= 0; row--)
+		for ( row = rows - 1; row >= 0; row-- )
 		{
 			pixbuf = targa_rgba + row * columns * 4;
-			for(column = 0; column < columns; column++)
+
+			for ( column = 0; column < columns; column++ )
 			{
 				unsigned char   red, green, blue, alpha;
 
-				switch (targa_header.pixel_size)
+				switch ( targa_header.pixel_size )
 				{
-
-					case 8:
+					case 8 :
 						blue = *buf_p++;
 						green = blue;
 						red = blue;
@@ -132,7 +138,7 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 						*pixbuf++ = alphaByte;
 						break;
 
-					case 24:
+					case 24 :
 						blue = *buf_p++;
 						green = *buf_p++;
 						red = *buf_p++;
@@ -141,7 +147,8 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 						*pixbuf++ = blue;
 						*pixbuf++ = alphaByte;
 						break;
-					case 32:
+
+					case 32 :
 						blue = *buf_p++;
 						green = *buf_p++;
 						red = *buf_p++;
@@ -151,15 +158,17 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 						*pixbuf++ = blue;
 						*pixbuf++ = alpha;
 						break;
-					default:
-						ri.Error(ERR_DROP, "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name);
+
+					default :
+						ri.Error( ERR_DROP, "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name );
 						break;
 				}
 			}
 		}
 	}
-	else if(targa_header.image_type == 10)
-	{							// Runlength encoded RGB images
+	else if ( targa_header.image_type == 10 )
+	{
+		// Runlength encoded RGB images
 		unsigned char   red, green, blue, alpha, packetHeader, packetSize, j;
 
 		red = 0;
@@ -167,59 +176,73 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 		blue = 0;
 		alpha = alphaByte;
 
-		for(row = rows - 1; row >= 0; row--)
+		for ( row = rows - 1; row >= 0; row-- )
 		{
 			pixbuf = targa_rgba + row * columns * 4;
-			for(column = 0; column < columns;)
+
+			for ( column = 0; column < columns; )
 			{
 				packetHeader = *buf_p++;
-				packetSize = 1 + (packetHeader & 0x7f);
-				if(packetHeader & 0x80)
-				{				// run-length packet
-					switch (targa_header.pixel_size)
+				packetSize = 1 + ( packetHeader & 0x7f );
+
+				if ( packetHeader & 0x80 )
+				{
+					// run-length packet
+					switch ( targa_header.pixel_size )
 					{
-						case 24:
+						case 24 :
 							blue = *buf_p++;
 							green = *buf_p++;
 							red = *buf_p++;
 							alpha = alphaByte;
 							break;
-						case 32:
+
+						case 32 :
 							blue = *buf_p++;
 							green = *buf_p++;
 							red = *buf_p++;
 							alpha = *buf_p++;
 							break;
-						default:
-							ri.Error(ERR_DROP, "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name);
+
+						default :
+							ri.Error( ERR_DROP, "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name );
 							break;
 					}
 
-					for(j = 0; j < packetSize; j++)
+					for ( j = 0; j < packetSize; j++ )
 					{
 						*pixbuf++ = red;
 						*pixbuf++ = green;
 						*pixbuf++ = blue;
 						*pixbuf++ = alpha;
 						column++;
-						if(column == columns)
-						{		// run spans across rows
+
+						if ( column == columns )
+						{
+							// run spans across rows
 							column = 0;
-							if(row > 0)
+
+							if ( row > 0 )
+							{
 								row--;
+							}
 							else
+							{
 								goto breakOut;
+							}
+
 							pixbuf = targa_rgba + row * columns * 4;
 						}
 					}
 				}
 				else
-				{				// non run-length packet
-					for(j = 0; j < packetSize; j++)
+				{
+					// non run-length packet
+					for ( j = 0; j < packetSize; j++ )
 					{
-						switch (targa_header.pixel_size)
+						switch ( targa_header.pixel_size )
 						{
-							case 24:
+							case 24 :
 								blue = *buf_p++;
 								green = *buf_p++;
 								red = *buf_p++;
@@ -228,7 +251,8 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 								*pixbuf++ = blue;
 								*pixbuf++ = alphaByte;
 								break;
-							case 32:
+
+							case 32 :
 								blue = *buf_p++;
 								green = *buf_p++;
 								red = *buf_p++;
@@ -238,60 +262,76 @@ void LoadTGA(const char *name, byte ** pic, int *width, int *height, byte alphaB
 								*pixbuf++ = blue;
 								*pixbuf++ = alpha;
 								break;
-							default:
-								ri.Error(ERR_DROP,
-										 "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name);
+
+							default :
+								ri.Error( ERR_DROP,
+								          "LoadTGA: illegal pixel_size '%d' in file '%s'\n", targa_header.pixel_size, name );
 								break;
 						}
+
 						column++;
-						if(column == columns)
-						{		// pixel packet run spans across rows
+
+						if ( column == columns )
+						{
+							// pixel packet run spans across rows
 							column = 0;
-							if(row > 0)
+
+							if ( row > 0 )
+							{
 								row--;
+							}
 							else
+							{
 								goto breakOut;
+							}
+
 							pixbuf = targa_rgba + row * columns * 4;
 						}
 					}
 				}
 			}
-		  breakOut:;
+
+breakOut:
+			;
 		}
 	}
 
 #if 1
+
 	// TTimo: this is the chunk of code to ensure a behavior that meets TGA specs
 	// bk0101024 - fix from Leonardo
 	// bit 5 set => top-down
-	if(targa_header.attributes & 0x20)
+	if ( targa_header.attributes & 0x20 )
 	{
 		unsigned char  *flip;
 		unsigned char  *src, *dst;
 
 		//ri.Printf(PRINT_WARNING, "WARNING: '%s' TGA file header declares top-down image, flipping\n", name);
 
-		flip = (unsigned char *)malloc(columns * 4);
-		for(row = 0; row < rows / 2; row++)
+		flip = ( unsigned char * )malloc( columns * 4 );
+
+		for ( row = 0; row < rows / 2; row++ )
 		{
 			src = targa_rgba + row * 4 * columns;
-			dst = targa_rgba + (rows - row - 1) * 4 * columns;
+			dst = targa_rgba + ( rows - row - 1 ) * 4 * columns;
 
-			memcpy(flip, src, columns * 4);
-			memcpy(src, dst, columns * 4);
-			memcpy(dst, flip, columns * 4);
+			memcpy( flip, src, columns * 4 );
+			memcpy( src, dst, columns * 4 );
+			memcpy( dst, flip, columns * 4 );
 		}
-		free(flip);
+
+		free( flip );
 	}
+
 #else
+
 	// instead we just print a warning
-	if(targa_header.attributes & 0x20)
+	if ( targa_header.attributes & 0x20 )
 	{
-		ri.Printf(PRINT_WARNING, "WARNING: '%s' TGA file header declares top-down image, ignoring\n", name);
+		ri.Printf( PRINT_WARNING, "WARNING: '%s' TGA file header declares top-down image, ignoring\n", name );
 	}
+
 #endif
 
-	ri.FS_FreeFile(buffer);
+	ri.FS_FreeFile( buffer );
 }
-
-

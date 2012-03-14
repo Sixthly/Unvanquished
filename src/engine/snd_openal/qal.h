@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -230,9 +230,9 @@ extern LPALCCAPTURESTART qalcCaptureStart;
 extern LPALCCAPTURESTOP qalcCaptureStop;
 extern LPALCCAPTURESAMPLES qalcCaptureSamples;
 
-qboolean QAL_Init(const char *libname);
+qboolean QAL_Init( const char *libname );
 void QAL_Shutdown( void );
 
 #endif // USE_OPENAL_DLOPEN
 
-#endif	// __QAL_H__
+#endif  // __QAL_H__

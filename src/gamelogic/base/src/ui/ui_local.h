@@ -132,13 +132,12 @@ extern vmCvar_t ui_serverStatusTimeOut;
 //TA: bank values
 extern vmCvar_t  ui_bank;
 
-
 //
 // ui_qmenu.c
 //
 
 #define RCOLUMN_OFFSET      ( BIGCHAR_WIDTH )
-#define LCOLUMN_OFFSET      (-BIGCHAR_WIDTH )
+#define LCOLUMN_OFFSET      ( -BIGCHAR_WIDTH )
 
 #define SLIDER_RANGE      10
 #define  MAX_EDIT_LINE      256
@@ -187,110 +186,111 @@ extern vmCvar_t  ui_bank;
 
 typedef struct _tag_menuframework
 {
-  int  cursor;
-  int cursor_prev;
+	int  cursor;
+	int cursor_prev;
 
-  int  nitems;
-  void *items[MAX_MENUITEMS];
+	int  nitems;
+	void *items[MAX_MENUITEMS];
 
-  void (*draw) (void);
-  sfxHandle_t (*key) (int key);
+	void ( *draw )( void );
+	sfxHandle_t ( *key )( int key );
 
-  qboolean  wrapAround;
-  qboolean  fullscreen;
-  qboolean  showlogo;
+	qboolean  wrapAround;
+	qboolean  fullscreen;
+	qboolean  showlogo;
 } menuframework_s;
 
 typedef struct
 {
-  int type;
-  const char *name;
-  int  id;
-  int x, y;
-  int left;
-  int  top;
-  int  right;
-  int  bottom;
-  menuframework_s *parent;
-  int menuPosition;
-  unsigned flags;
+	int type;
+	const char *name;
+	int  id;
+	int x, y;
+	int left;
+	int  top;
+	int  right;
+	int  bottom;
+	menuframework_s *parent;
+	int menuPosition;
+	unsigned flags;
 
-  void (*callback)( void *self, int event );
-  void (*statusbar)( void *self );
-  void (*ownerdraw)( void *self );
+	void ( *callback )( void *self, int event );
+	void ( *statusbar )( void *self );
+	void ( *ownerdraw )( void *self );
 } menucommon_s;
 
-typedef struct {
-  int    cursor;
-  int    scroll;
-  int    widthInChars;
-  char  buffer[MAX_EDIT_LINE];
-  int    maxchars;
+typedef struct
+{
+	int    cursor;
+	int    scroll;
+	int    widthInChars;
+	char  buffer[MAX_EDIT_LINE];
+	int    maxchars;
 } mfield_t;
 
 typedef struct
 {
-  menucommon_s  generic;
-  mfield_t    field;
+	menucommon_s  generic;
+	mfield_t    field;
 } menufield_s;
 
 typedef struct
 {
-  menucommon_s generic;
+	menucommon_s generic;
 
-  float minvalue;
-  float maxvalue;
-  float curvalue;
+	float minvalue;
+	float maxvalue;
+	float curvalue;
 
-  float range;
+	float range;
 } menuslider_s;
 
 typedef struct
 {
-  menucommon_s generic;
+	menucommon_s generic;
 
-  int  oldvalue;
-  int curvalue;
-  int  numitems;
-  int  top;
+	int  oldvalue;
+	int curvalue;
+	int  numitems;
+	int  top;
 
-  const char **itemnames;
+	const char **itemnames;
 
-  int width;
-  int height;
-  int  columns;
-  int  seperation;
+	int width;
+	int height;
+	int  columns;
+	int  seperation;
 } menulist_s;
 
 typedef struct
 {
-  menucommon_s generic;
+	menucommon_s generic;
 } menuaction_s;
 
 typedef struct
 {
-  menucommon_s generic;
-  int curvalue;
+	menucommon_s generic;
+	int curvalue;
 } menuradiobutton_s;
 
 typedef struct
 {
-  menucommon_s  generic;
-  char*      focuspic;
-  char*      errorpic;
-  qhandle_t    shader;
-  qhandle_t    focusshader;
-  int        width;
-  int        height;
-  float*      focuscolor;
+	menucommon_s  generic;
+	char      *focuspic;
+	char      *errorpic;
+	qhandle_t    shader;
+	qhandle_t    focusshader;
+	int        width;
+	int        height;
+	float      *focuscolor;
 } menubitmap_s;
 
 typedef struct
 {
-  menucommon_s  generic;
-  char*      string;
-  int        style;
-  float*      color;
+	menucommon_s  generic;
+	char      *string;
+	int        style;
+	float      *color;
 } menutext_s;
 
 extern void      Menu_Cache( void );
@@ -299,14 +299,15 @@ extern void      Menu_AddItem( menuframework_s *menu, void *item );
 extern void      Menu_AdjustCursor( menuframework_s *menu, int dir );
 extern void      Menu_Draw( menuframework_s *menu );
 extern void      *Menu_ItemAtCursor( menuframework_s *m );
-extern sfxHandle_t  Menu_ActivateItem( menuframework_s *s, menucommon_s* item );
+extern sfxHandle_t  Menu_ActivateItem( menuframework_s *s, menucommon_s *item );
 extern void      Menu_SetCursor( menuframework_s *s, int cursor );
-extern void      Menu_SetCursorToItem( menuframework_s *m, void* ptr );
+extern void      Menu_SetCursorToItem( menuframework_s *m, void *ptr );
 extern sfxHandle_t  Menu_DefaultKey( menuframework_s *s, int key );
 extern void      Bitmap_Init( menubitmap_s *b );
 extern void      Bitmap_Draw( menubitmap_s *b );
 extern void      ScrollList_Draw( menulist_s *l );
 extern sfxHandle_t  ScrollList_Key( menulist_s *l, int key );
+
 extern sfxHandle_t  menu_in_sound;
 extern sfxHandle_t  menu_move_sound;
 extern sfxHandle_t  menu_out_sound;
@@ -345,27 +346,27 @@ extern void      MField_Clear( mfield_t *edit );
 extern void      MField_KeyDownEvent( mfield_t *edit, int key );
 extern void      MField_CharEvent( mfield_t *edit, int ch );
 extern void      MField_Draw( mfield_t *edit, int x, int y, int style, vec4_t color );
-extern void      MenuField_Init( menufield_s* m );
+extern void      MenuField_Init( menufield_s *m );
 extern void      MenuField_Draw( menufield_s *f );
-extern sfxHandle_t  MenuField_Key( menufield_s* m, int* key );
+extern sfxHandle_t  MenuField_Key( menufield_s *m, int *key );
 
 //
 // ui_main.c
 //
 void UI_Report( void );
 void UI_Load( void );
-void UI_LoadMenus(const char *menuFile, qboolean reset);
+void UI_LoadMenus( const char *menuFile, qboolean reset );
 void _UI_SetActiveMenu( uiMenuCommand_t menu );
-int UI_AdjustTimeByGame(int time);
-void UI_ShowPostGame(qboolean newHigh);
+int UI_AdjustTimeByGame( int time );
+void UI_ShowPostGame( qboolean newHigh );
 void UI_ClearScores( void );
-void UI_LoadArenas(void);
+void UI_LoadArenas( void );
 
 //
 // ui_menu.c
 //
 extern void MainMenu_Cache( void );
-extern void UI_MainMenu(void);
+extern void UI_MainMenu( void );
 extern void UI_RegisterCvars( void );
 extern void UI_UpdateCvars( void );
 
@@ -378,19 +379,19 @@ extern void UI_CreditMenu( void );
 // ui_ingame.c
 //
 extern void InGame_Cache( void );
-extern void UI_InGameMenu(void);
+extern void UI_InGameMenu( void );
 
 //
 // ui_confirm.c
 //
 extern void ConfirmMenu_Cache( void );
-extern void UI_ConfirmMenu( const char *question, void (*draw)( void ), void (*action)( qboolean result ) );
+extern void UI_ConfirmMenu( const char *question, void ( *draw )( void ), void ( *action )( qboolean result ) );
 
 //
 // ui_setup.c
 //
 extern void UI_SetupMenu_Cache( void );
-extern void UI_SetupMenu(void);
+extern void UI_SetupMenu( void );
 
 //
 // ui_team.c
@@ -493,104 +494,106 @@ extern void DriverInfo_Cache( void );
 //
 
 //FIXME ripped from cg_local.h
-typedef struct {
-  int      oldFrame;
-  int      oldFrameTime;    // time when ->oldFrame was exactly on
+typedef struct
+{
+	int      oldFrame;
+	int      oldFrameTime;    // time when ->oldFrame was exactly on
 
-  int      frame;
-  int      frameTime;      // time when ->frame will be exactly on
+	int      frame;
+	int      frameTime;      // time when ->frame will be exactly on
 
-  float    backlerp;
+	float    backlerp;
 
-  float    yawAngle;
-  qboolean  yawing;
-  float    pitchAngle;
-  qboolean  pitching;
+	float    yawAngle;
+	qboolean  yawing;
+	float    pitchAngle;
+	qboolean  pitching;
 
-  int      animationNumber;  // may include ANIM_TOGGLEBIT
-  animation_t  *animation;
-  int      animationTime;    // time when the first frame of the animation will be exact
+	int      animationNumber;  // may include ANIM_TOGGLEBIT
+	animation_t  *animation;
+	int      animationTime;    // time when the first frame of the animation will be exact
 } lerpFrame_t;
 
-typedef struct {
-  // model info
-  qhandle_t    legsModel;
-  qhandle_t    legsSkin;
-  lerpFrame_t    legs;
+typedef struct
+{
+	// model info
+	qhandle_t    legsModel;
+	qhandle_t    legsSkin;
+	lerpFrame_t    legs;
 
-  qhandle_t    torsoModel;
-  qhandle_t    torsoSkin;
-  lerpFrame_t    torso;
+	qhandle_t    torsoModel;
+	qhandle_t    torsoSkin;
+	lerpFrame_t    torso;
 
-  qhandle_t    headModel;
-  qhandle_t    headSkin;
+	qhandle_t    headModel;
+	qhandle_t    headSkin;
 
-  animation_t    animations[MAX_PLAYER_TOTALANIMATIONS];
+	animation_t    animations[MAX_PLAYER_TOTALANIMATIONS];
 
-  qhandle_t    weaponModel;
-  qhandle_t    barrelModel;
-  qhandle_t    flashModel;
-  vec3_t      flashDlightColor;
-  int        muzzleFlashTime;
+	qhandle_t    weaponModel;
+	qhandle_t    barrelModel;
+	qhandle_t    flashModel;
+	vec3_t      flashDlightColor;
+	int        muzzleFlashTime;
 
-  // currently in use drawing parms
-  vec3_t      viewAngles;
-  vec3_t      moveAngles;
-  weapon_t    currentWeapon;
-  int        legsAnim;
-  int        torsoAnim;
+	// currently in use drawing parms
+	vec3_t      viewAngles;
+	vec3_t      moveAngles;
+	weapon_t    currentWeapon;
+	int        legsAnim;
+	int        torsoAnim;
 
-  // animation vars
-  weapon_t    weapon;
-  weapon_t    lastWeapon;
-  weapon_t    pendingWeapon;
-  int        weaponTimer;
-  int        pendingLegsAnim;
-  int        torsoAnimationTimer;
+	// animation vars
+	weapon_t    weapon;
+	weapon_t    lastWeapon;
+	weapon_t    pendingWeapon;
+	int        weaponTimer;
+	int        pendingLegsAnim;
+	int        torsoAnimationTimer;
 
-  int        pendingTorsoAnim;
-  int        legsAnimationTimer;
+	int        pendingTorsoAnim;
+	int        legsAnimationTimer;
 
-  qboolean    chat;
-  qboolean    newModel;
+	qboolean    chat;
+	qboolean    newModel;
 
-  qboolean    barrelSpinning;
-  float      barrelAngle;
-  int        barrelTime;
+	qboolean    barrelSpinning;
+	float      barrelAngle;
+	int        barrelTime;
 
-  int        realWeapon;
+	int        realWeapon;
 } playerInfo_t;
 
 void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
 void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model, const char *headmodel, char *teamName );
 void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat );
-qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName , const char *headName, const char *teamName);
+qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName, const char *headName, const char *teamName );
 
 //
 // ui_atoms.c
 //
 // this is only used in the old ui, the new ui has it's own version
-typedef struct {
-  int          frametime;
-  int          realtime;
-  int          cursorx;
-  int          cursory;
-  glconfig_t   glconfig;
-  qboolean     debug;
-  qhandle_t    whiteShader;
-  qhandle_t    charset;
-  qhandle_t    charsetProp;
-  qhandle_t    charsetPropGlow;
-  qhandle_t    charsetPropB;
-  qhandle_t    cursor;
-  qhandle_t    rb_on;
-  qhandle_t    rb_off;
-  float        scale;
-  float        bias;
-  qboolean     demoversion;
-  qboolean     firstdraw;
+typedef struct
+{
+	int          frametime;
+	int          realtime;
+	int          cursorx;
+	int          cursory;
+	glconfig_t   glconfig;
+	qboolean     debug;
+	qhandle_t    whiteShader;
+	qhandle_t    charset;
+	qhandle_t    charsetProp;
+	qhandle_t    charsetPropGlow;
+	qhandle_t    charsetPropB;
+	qhandle_t    cursor;
+	qhandle_t    rb_on;
+	qhandle_t    rb_off;
+	float        scale;
+	float        bias;
+	qboolean     demoversion;
+	qboolean     firstdraw;
 } uiStatic_t;
-
 
 // new ui stuff
 #define UI_NUMFX 7
@@ -625,116 +628,125 @@ typedef struct {
 #define MAX_MOVIES 256
 #define MAX_PLAYERMODELS 256
 
-
-typedef struct {
-  const char *name;
-  const char *imageName;
-  qhandle_t headImage;
-  const char *base;
-  qboolean active;
-  int reference;
+typedef struct
+{
+	const char *name;
+	const char *imageName;
+	qhandle_t headImage;
+	const char *base;
+	qboolean active;
+	int reference;
 } characterInfo;
 
-typedef struct {
-  const char *name;
-  const char *ai;
-  const char *action;
+typedef struct
+{
+	const char *name;
+	const char *ai;
+	const char *action;
 } aliasInfo;
 
-typedef struct {
-  const char *teamName;
-  const char *imageName;
-  const char *teamMembers[TEAM_MEMBERS];
-  qhandle_t teamIcon;
-  qhandle_t teamIcon_Metal;
-  qhandle_t teamIcon_Name;
-  int cinematic;
+typedef struct
+{
+	const char *teamName;
+	const char *imageName;
+	const char *teamMembers[TEAM_MEMBERS];
+	qhandle_t teamIcon;
+	qhandle_t teamIcon_Metal;
+	qhandle_t teamIcon_Name;
+	int cinematic;
 } teamInfo;
 
-typedef struct {
-  const char *gameType;
-  int gtEnum;
+typedef struct
+{
+	const char *gameType;
+	int gtEnum;
 } gameTypeInfo;
 
-typedef struct {
-  const char *mapName;
-  const char *mapLoadName;
-  const char *imageName;
-  const char *opponentName;
-  int teamMembers;
-  int typeBits;
-  int cinematic;
-  int timeToBeat[MAX_GAMETYPES];
-  qhandle_t levelShot;
-  qboolean active;
+typedef struct
+{
+	const char *mapName;
+	const char *mapLoadName;
+	const char *imageName;
+	const char *opponentName;
+	int teamMembers;
+	int typeBits;
+	int cinematic;
+	int timeToBeat[MAX_GAMETYPES];
+	qhandle_t levelShot;
+	qboolean active;
 } mapInfo;
 
-typedef struct {
-  const char *tierName;
-  const char *maps[MAPS_PER_TIER];
-  int gameTypes[MAPS_PER_TIER];
-  qhandle_t mapHandles[MAPS_PER_TIER];
+typedef struct
+{
+	const char *tierName;
+	const char *maps[MAPS_PER_TIER];
+	int gameTypes[MAPS_PER_TIER];
+	qhandle_t mapHandles[MAPS_PER_TIER];
 } tierInfo;
 
-typedef struct serverFilter_s {
-  const char *description;
-  const char *basedir;
+typedef struct serverFilter_s
+{
+	const char *description;
+	const char *basedir;
 } serverFilter_t;
 
-
-typedef struct serverStatus_s {
-  int    numqueriedservers;
-  int    currentping;
-  int    nextpingtime;
-  int    maxservers;
-  int    refreshtime;
-  int    numServers;
-  int    sortKey;
-  int    sortDir;
-  int    lastCount;
-  qboolean refreshActive;
-  int    currentServer;
-  int    displayServers[MAX_DISPLAY_SERVERS];
-  int    numDisplayServers;
-  int    numPlayersOnServers;
-  int    nextDisplayRefresh;
-  int    nextSortTime;
-  qhandle_t currentServerPreview;
-  int    currentServerCinematic;
-  int    motdLen;
-  int    motdWidth;
-  int    motdPaintX;
-  int    motdPaintX2;
-  int    motdOffset;
-  int    motdTime;
-  char  motd[MAX_STRING_CHARS];
+typedef struct serverStatus_s
+{
+	int    numqueriedservers;
+	int    currentping;
+	int    nextpingtime;
+	int    maxservers;
+	int    refreshtime;
+	int    numServers;
+	int    sortKey;
+	int    sortDir;
+	int    lastCount;
+	qboolean refreshActive;
+	int    currentServer;
+	int    displayServers[MAX_DISPLAY_SERVERS];
+	int    numDisplayServers;
+	int    numPlayersOnServers;
+	int    nextDisplayRefresh;
+	int    nextSortTime;
+	qhandle_t currentServerPreview;
+	int    currentServerCinematic;
+	int    motdLen;
+	int    motdWidth;
+	int    motdPaintX;
+	int    motdPaintX2;
+	int    motdOffset;
+	int    motdTime;
+	char  motd[MAX_STRING_CHARS];
 } serverStatus_t;
 
-
-typedef struct {
-  char    adrstr[MAX_ADDRESSLENGTH];
-  char    name[MAX_ADDRESSLENGTH];
-  int      startTime;
-  int      serverNum;
-  qboolean  valid;
+typedef struct
+{
+	char    adrstr[MAX_ADDRESSLENGTH];
+	char    name[MAX_ADDRESSLENGTH];
+	int      startTime;
+	int      serverNum;
+	qboolean  valid;
 } pendingServer_t;
 
-typedef struct {
-  int num;
-  pendingServer_t server[MAX_SERVERSTATUSREQUESTS];
+typedef struct
+{
+	int num;
+	pendingServer_t server[MAX_SERVERSTATUSREQUESTS];
 } pendingServerStatus_t;
 
-typedef struct {
-  char address[MAX_ADDRESSLENGTH];
-  char *lines[MAX_SERVERSTATUS_LINES][4];
-  char text[MAX_SERVERSTATUS_TEXT];
-  char pings[MAX_CLIENTS * 3];
-  int numLines;
+typedef struct
+{
+	char address[MAX_ADDRESSLENGTH];
+	char *lines[MAX_SERVERSTATUS_LINES][4];
+	char text[MAX_SERVERSTATUS_TEXT];
+	char pings[MAX_CLIENTS * 3];
+	int numLines;
 } serverStatusInfo_t;
 
-typedef struct {
-  const char *modName;
-  const char *modDescr;
+typedef struct
+{
+	const char *modName;
+	const char *modDescr;
 } modInfo_t;
 
 //TA: tremulous menus
@@ -752,160 +764,159 @@ typedef enum
 
 typedef struct
 {
-  qhandle_t     graphic;
+	qhandle_t     graphic;
 
-  tremIPSide_t  side;
-  int           offset;
+	tremIPSide_t  side;
+	int           offset;
 
-  int           width, height;
+	int           width, height;
 } tremIPGraphic_t;
 
 typedef struct
 {
-  const char      *name;
-  char            text[ MAX_INFOPANE_TEXT ];
-  int             align;
+	const char      *name;
+	char            text[MAX_INFOPANE_TEXT];
+	int             align;
 
-  tremIPGraphic_t graphics[ MAX_INFOPANE_GRAPHICS ];
-  int             numGraphics;
+	tremIPGraphic_t graphics[MAX_INFOPANE_GRAPHICS];
+	int             numGraphics;
 } tremInfoPane_t;
 
 typedef struct
 {
-  const char      *text;
-  const char      *cmd;
-  tremInfoPane_t  *infopane;
+	const char      *text;
+	const char      *cmd;
+	tremInfoPane_t  *infopane;
 } tremMenuItem_t;
 //TA: tremulous menus
 
-typedef struct {
-  displayContextDef_t uiDC;
-  int newHighScoreTime;
-  int newBestTime;
-  int showPostGameTime;
-  qboolean newHighScore;
-  qboolean demoAvailable;
-  qboolean soundHighScore;
+typedef struct
+{
+	displayContextDef_t uiDC;
+	int newHighScoreTime;
+	int newBestTime;
+	int showPostGameTime;
+	qboolean newHighScore;
+	qboolean demoAvailable;
+	qboolean soundHighScore;
 
-  int characterCount;
-  int botIndex;
-  characterInfo characterList[MAX_HEADS];
+	int characterCount;
+	int botIndex;
+	characterInfo characterList[MAX_HEADS];
 
-  int aliasCount;
-  aliasInfo aliasList[MAX_ALIASES];
+	int aliasCount;
+	aliasInfo aliasList[MAX_ALIASES];
 
-  int teamCount;
-  teamInfo teamList[MAX_TEAMS];
+	int teamCount;
+	teamInfo teamList[MAX_TEAMS];
 
-  int numGameTypes;
-  gameTypeInfo gameTypes[MAX_GAMETYPES];
+	int numGameTypes;
+	gameTypeInfo gameTypes[MAX_GAMETYPES];
 
-  int numJoinGameTypes;
-  gameTypeInfo joinGameTypes[MAX_GAMETYPES];
+	int numJoinGameTypes;
+	gameTypeInfo joinGameTypes[MAX_GAMETYPES];
 
-  int redBlue;
-  int playerCount;
-  int myTeamCount;
-  int teamIndex;
-  int playerRefresh;
-  int playerIndex;
-  int playerNumber;
-  qboolean teamLeader;
-  char playerNames[MAX_CLIENTS][MAX_NAME_LENGTH];
-  char teamNames[MAX_CLIENTS][MAX_NAME_LENGTH];
-  int teamClientNums[MAX_CLIENTS];
+	int redBlue;
+	int playerCount;
+	int myTeamCount;
+	int teamIndex;
+	int playerRefresh;
+	int playerIndex;
+	int playerNumber;
+	qboolean teamLeader;
+	char playerNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	char teamNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	int teamClientNums[MAX_CLIENTS];
 
-  int mapCount;
-  mapInfo mapList[MAX_MAPS];
+	int mapCount;
+	mapInfo mapList[MAX_MAPS];
 
+	int tierCount;
+	tierInfo tierList[MAX_TIERS];
 
-  int tierCount;
-  tierInfo tierList[MAX_TIERS];
+	int skillIndex;
 
-  int skillIndex;
+	modInfo_t modList[MAX_MODS];
+	int modCount;
+	int modIndex;
 
-  modInfo_t modList[MAX_MODS];
-  int modCount;
-  int modIndex;
+	const char *demoList[MAX_DEMOS];
+	int demoCount;
+	int demoIndex;
 
-  const char *demoList[MAX_DEMOS];
-  int demoCount;
-  int demoIndex;
+	const char *movieList[MAX_MOVIES];
+	int movieCount;
+	int movieIndex;
+	int previewMovie;
 
-  const char *movieList[MAX_MOVIES];
-  int movieCount;
-  int movieIndex;
-  int previewMovie;
-
-  tremInfoPane_t  tremInfoPanes[ MAX_INFOPANES ];
-  int             tremInfoPaneCount;
+	tremInfoPane_t  tremInfoPanes[MAX_INFOPANES];
+	int             tremInfoPaneCount;
 
 //TA: tremulous menus
-  tremMenuItem_t  tremTeamList[ 4 ];
-  int             tremTeamCount;
-  int             tremTeamIndex;
+	tremMenuItem_t  tremTeamList[4];
+	int             tremTeamCount;
+	int             tremTeamIndex;
 
-  tremMenuItem_t  tremAlienClassList[ 3 ];
-  int             tremAlienClassCount;
-  int             tremAlienClassIndex;
+	tremMenuItem_t  tremAlienClassList[3];
+	int             tremAlienClassCount;
+	int             tremAlienClassIndex;
 
-  tremMenuItem_t  tremHumanItemList[ 3 ];
-  int             tremHumanItemCount;
-  int             tremHumanItemIndex;
+	tremMenuItem_t  tremHumanItemList[3];
+	int             tremHumanItemCount;
+	int             tremHumanItemIndex;
 
-  tremMenuItem_t  tremHumanArmouryBuyList[ 32 ];
-  int             tremHumanArmouryBuyCount;
-  int             tremHumanArmouryBuyIndex;
+	tremMenuItem_t  tremHumanArmouryBuyList[32];
+	int             tremHumanArmouryBuyCount;
+	int             tremHumanArmouryBuyIndex;
 
-  tremMenuItem_t  tremHumanArmourySellList[ 32 ];
-  int             tremHumanArmourySellCount;
-  int             tremHumanArmourySellIndex;
+	tremMenuItem_t  tremHumanArmourySellList[32];
+	int             tremHumanArmourySellCount;
+	int             tremHumanArmourySellIndex;
 
-  tremMenuItem_t  tremAlienUpgradeList[ 16 ];
-  int             tremAlienUpgradeCount;
-  int             tremAlienUpgradeIndex;
+	tremMenuItem_t  tremAlienUpgradeList[16];
+	int             tremAlienUpgradeCount;
+	int             tremAlienUpgradeIndex;
 
-  tremMenuItem_t  tremAlienBuildList[ 32 ];
-  int             tremAlienBuildCount;
-  int             tremAlienBuildIndex;
+	tremMenuItem_t  tremAlienBuildList[32];
+	int             tremAlienBuildCount;
+	int             tremAlienBuildIndex;
 
-  tremMenuItem_t  tremHumanBuildList[ 32 ];
-  int             tremHumanBuildCount;
-  int             tremHumanBuildIndex;
+	tremMenuItem_t  tremHumanBuildList[32];
+	int             tremHumanBuildCount;
+	int             tremHumanBuildIndex;
 //TA: tremulous menus
 
-  serverStatus_t serverStatus;
+	serverStatus_t serverStatus;
 
-  // for the showing the status of a server
-  char serverStatusAddress[MAX_ADDRESSLENGTH];
-  serverStatusInfo_t serverStatusInfo;
-  int nextServerStatusRefresh;
+	// for the showing the status of a server
+	char serverStatusAddress[MAX_ADDRESSLENGTH];
+	serverStatusInfo_t serverStatusInfo;
+	int nextServerStatusRefresh;
 
-  // to retrieve the status of server to find a player
-  pendingServerStatus_t pendingServerStatus;
-  char findPlayerName[MAX_STRING_CHARS];
-  char foundPlayerServerAddresses[MAX_FOUNDPLAYER_SERVERS][MAX_ADDRESSLENGTH];
-  char foundPlayerServerNames[MAX_FOUNDPLAYER_SERVERS][MAX_ADDRESSLENGTH];
-  int currentFoundPlayerServer;
-  int numFoundPlayerServers;
-  int nextFindPlayerRefresh;
+	// to retrieve the status of server to find a player
+	pendingServerStatus_t pendingServerStatus;
+	char findPlayerName[MAX_STRING_CHARS];
+	char foundPlayerServerAddresses[MAX_FOUNDPLAYER_SERVERS][MAX_ADDRESSLENGTH];
+	char foundPlayerServerNames[MAX_FOUNDPLAYER_SERVERS][MAX_ADDRESSLENGTH];
+	int currentFoundPlayerServer;
+	int numFoundPlayerServers;
+	int nextFindPlayerRefresh;
 
-  int currentCrosshair;
-  int startPostGameTime;
-  sfxHandle_t newHighScoreSound;
+	int currentCrosshair;
+	int startPostGameTime;
+	sfxHandle_t newHighScoreSound;
 
-  int        q3HeadCount;
-  char      q3HeadNames[MAX_PLAYERMODELS][64];
-  qhandle_t  q3HeadIcons[MAX_PLAYERMODELS];
-  int        q3SelectedHead;
+	int        q3HeadCount;
+	char      q3HeadNames[MAX_PLAYERMODELS][64];
+	qhandle_t  q3HeadIcons[MAX_PLAYERMODELS];
+	int        q3SelectedHead;
 
-  int effectsColor;
+	int effectsColor;
 
-  qboolean inGameLoad;
+	qboolean inGameLoad;
 }  uiInfo_t;
 
 extern uiInfo_t uiInfo;
-
 
 extern void      UI_Init( void );
 extern void      UI_Shutdown( void );
@@ -918,32 +929,34 @@ extern void      UI_DrawNamedPic( float x, float y, float width, float height, c
 extern void      UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader );
 extern void      UI_FillRect( float x, float y, float width, float height, const float *color );
 extern void      UI_DrawRect( float x, float y, float width, float height, const float *color );
-extern void     UI_DrawTopBottom(float x, float y, float w, float h);
-extern void     UI_DrawSides(float x, float y, float w, float h);
+extern void     UI_DrawTopBottom( float x, float y, float w, float h );
+extern void     UI_DrawSides( float x, float y, float w, float h );
 extern void      UI_UpdateScreen( void );
 extern void      UI_SetColor( const float *rgba );
-extern void      UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
-extern void      UI_DrawBannerString( int x, int y, const char* str, int style, vec4_t color );
+extern void      UI_LerpColor( vec4_t a, vec4_t b, vec4_t c, float t );
+extern void      UI_DrawBannerString( int x, int y, const char *str, int style, vec4_t color );
 extern float    UI_ProportionalSizeScale( int style );
-extern void      UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
-extern int      UI_ProportionalStringWidth( const char* str );
-extern void      UI_DrawString( int x, int y, const char* str, int style, vec4_t color );
+extern void      UI_DrawProportionalString( int x, int y, const char *str, int style, vec4_t color );
+extern int      UI_ProportionalStringWidth( const char *str );
+extern void      UI_DrawString( int x, int y, const char *str, int style, vec4_t color );
 extern void      UI_DrawChar( int x, int y, int ch, int style, vec4_t color );
-extern qboolean   UI_CursorInRect (int x, int y, int width, int height);
+extern qboolean   UI_CursorInRect ( int x, int y, int width, int height );
 extern void      UI_AdjustFrom640( float *x, float *y, float *w, float *h );
-extern void      UI_DrawTextBox (int x, int y, int width, int lines);
+extern void      UI_DrawTextBox ( int x, int y, int width, int lines );
 extern qboolean    UI_IsFullscreen( void );
 extern void      UI_SetActiveMenu( uiMenuCommand_t menu );
 extern void      UI_PushMenu ( menuframework_s *menu );
-extern void      UI_PopMenu (void);
-extern void      UI_ForceMenuOff (void);
+extern void      UI_PopMenu ( void );
+extern void      UI_ForceMenuOff ( void );
 extern char      *UI_Argv( int arg );
 extern char      *UI_Cvar_VariableString( const char *var_name );
 extern void      UI_Refresh( int time );
 extern void      UI_KeyEvent( int key );
 extern void      UI_StartDemoLoop( void );
+
 extern qboolean    m_entersound;
-void UI_LoadBestScores(const char *map, int game);
+void UI_LoadBestScores( const char *map, int game );
+
 extern uiStatic_t  uis;
 
 //
@@ -1023,7 +1036,8 @@ void UI_NetworkOptionsMenu( void );
 //
 // ui_gameinfo.c
 //
-typedef enum {
+typedef enum
+{
   AWARD_ACCURACY,
   AWARD_IMPRESSIVE,
   AWARD_EXCELLENT,
@@ -1078,31 +1092,29 @@ void UI_SignupMenu( void );
 void RankStatus_Cache( void );
 void UI_RankStatusMenu( void );
 
-
 // new ui
 
 #define ASSET_BACKGROUND "uiBackground"
 
 // for tracking sp game info in Team Arena
-typedef struct postGameInfo_s {
-  int score;
-  int redScore;
-  int blueScore;
-  int perfects;
-  int accuracy;
-  int impressives;
-  int excellents;
-  int defends;
-  int assists;
-  int gauntlets;
-  int  captures;
-  int time;
-  int timeBonus;
-  int shutoutBonus;
-  int skillBonus;
-  int baseScore;
+typedef struct postGameInfo_s
+{
+	int score;
+	int redScore;
+	int blueScore;
+	int perfects;
+	int accuracy;
+	int impressives;
+	int excellents;
+	int defends;
+	int assists;
+	int gauntlets;
+	int  captures;
+	int time;
+	int timeBonus;
+	int shutoutBonus;
+	int skillBonus;
+	int baseScore;
 } postGameInfo_t;
-
-
 
 #endif

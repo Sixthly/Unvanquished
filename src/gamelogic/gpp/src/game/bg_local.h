@@ -28,34 +28,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define STEPSIZE    18
 
 #define TIMER_LAND        130
-#define TIMER_GESTURE     (34*66+50)
+#define TIMER_GESTURE     ( 34 * 66 + 50 )
 #define TIMER_ATTACK      500 //nonsegmented models
 
 #define OVERCLIP    1.001f
 
 #define FALLING_THRESHOLD -900.0f //what vertical speed to start falling sound at
 
-
 // all of the locals will be zeroed before each
 // pmove, just to make damn sure we don't have
 // any differences when running on client or server
 typedef struct
 {
-  vec3_t    forward, right, up;
-  float     frametime;
+	vec3_t    forward, right, up;
+	float     frametime;
 
-  int       msec;
+	int       msec;
 
-  qboolean  walking;
-  qboolean  groundPlane;
-  qboolean  ladder;
-  trace_t   groundTrace;
+	qboolean  walking;
+	qboolean  groundPlane;
+	qboolean  ladder;
+	trace_t   groundTrace;
 
-  float     impactSpeed;
+	float     impactSpeed;
 
-  vec3_t    previous_origin;
-  vec3_t    previous_velocity;
-  int       previous_waterlevel;
+	vec3_t    previous_origin;
+	vec3_t    previous_velocity;
+	int       previous_waterlevel;
 } pml_t;
 
 extern  pmove_t       *pm;

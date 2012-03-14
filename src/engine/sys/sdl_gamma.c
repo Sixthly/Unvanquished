@@ -22,9 +22,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #ifdef USE_LOCAL_HEADERS
-#	include "SDL.h"
+#   include "SDL.h"
 #else
-#	include <SDL.h>
+#   include <SDL.h>
 #endif
 
 #include "../renderer/tr_local.h"
@@ -43,20 +43,24 @@ GLimp_InitGamma
 Saves old gamma ramp and checks if gamma is supportet by the hardware.
 ===========
 */
-void GLimp_InitGamma(void) {
+void GLimp_InitGamma( void )
+{
 	// Get original gamma ramp
-	if (SDL_GetGammaRamp(OldGammaRamp[0], OldGammaRamp[1], OldGammaRamp[2]) == -1) {
+	if ( SDL_GetGammaRamp( OldGammaRamp[0], OldGammaRamp[1], OldGammaRamp[2] ) == -1 )
+	{
 		glConfig.deviceSupportsGamma = qfalse;
 		return;
 	}
 
 	glConfig.deviceSupportsGamma = qtrue;
 #ifdef WIN32
-	if ( !r_ignorehwgamma->integer ) {
+
+	if ( !r_ignorehwgamma->integer )
+	{
 		// do a sanity check on the gamma values
 		if ( ( HIBYTE( OldGammaRamp[0][255] ) <= HIBYTE( OldGammaRamp[0][0] ) ) ||
-			 ( HIBYTE( OldGammaRamp[1][255] ) <= HIBYTE( OldGammaRamp[1][0] ) ) ||
-			 ( HIBYTE( OldGammaRamp[2][255] ) <= HIBYTE( OldGammaRamp[2][0] ) ) )
+		     ( HIBYTE( OldGammaRamp[1][255] ) <= HIBYTE( OldGammaRamp[1][0] ) ) ||
+		     ( HIBYTE( OldGammaRamp[2][255] ) <= HIBYTE( OldGammaRamp[2][0] ) ) )
 		{
 			glConfig.deviceSupportsGamma = qfalse;
 			ri.Printf( PRINT_WARNING, "WARNING: device has broken gamma support, generated gamma.dat\n" );
@@ -78,6 +82,7 @@ void GLimp_InitGamma(void) {
 			}
 		}
 	}
+
 #endif
 }
 
@@ -86,36 +91,43 @@ void GLimp_InitGamma(void) {
 GLimp_SetGamma
 =================
 */
-void GLimp_SetGamma(unsigned char red[256], unsigned char green[256], unsigned char blue[256])
+void GLimp_SetGamma( unsigned char red[256], unsigned char green[256], unsigned char blue[256] )
 {
-#if defined(IPHONE)
+#if defined( IPHONE )
 	UNIMPL();
-#else	
+#else
 #if 1
 	Uint16 table[256];
-	int	i, value, lastvalue=0;
+	int i, value, lastvalue = 0;
 
-	for (i=0; i<256; i++) {
-		value = ( ( (Uint16) red[i] ) << 8 ) | red[i];
+	for ( i = 0; i < 256; i++ )
+	{
+		value = ( ( ( Uint16 ) red[i] ) << 8 ) | red[i];
 
-		if ( i < 128 && (value > ( (128+i) << 8 )) ) {
-			value = (128+i) << 8;
+		if ( i < 128 && ( value > ( ( 128 + i ) << 8 ) ) )
+		{
+			value = ( 128 + i ) << 8;
 		}
 
-		if (i && (value < lastvalue) ) {
+		if ( i && ( value < lastvalue ) )
+		{
 			value = lastvalue;
 		}
 
 		lastvalue = table[i] = value;
 	}
 
-	if (SDL_SetGammaRamp(table, table, table)== -1) {
+	if ( SDL_SetGammaRamp( table, table, table ) == -1 )
+	{
 		Com_Printf( "SDL_SetGammaRamp failed.\n" );
 	}
+
 #else
-	float g = Cvar_Get("r_gamma", "1.0", 0)->value;
-	if (SDL_SetGamma( g,g,g ) == -1) {
-	      Com_Printf( "SDL_SetGamma failed.\n" );
+	float g = Cvar_Get( "r_gamma", "1.0", 0 )->value;
+
+	if ( SDL_SetGamma( g, g, g ) == -1 )
+	{
+		Com_Printf( "SDL_SetGamma failed.\n" );
 	}
 
 #endif
@@ -128,11 +140,15 @@ GLimp_RestoreGamma
 Restores original gamma ramp
 ===========
 */
-void GLimp_RestoreGamma(void) {
-	if ( glConfig.deviceSupportsGamma ) {
+void GLimp_RestoreGamma( void )
+{
+	if ( glConfig.deviceSupportsGamma )
+	{
 		// Restore original gamma
-		if (SDL_SetGammaRamp(OldGammaRamp[0], OldGammaRamp[1], OldGammaRamp[2])== -1)
+		if ( SDL_SetGammaRamp( OldGammaRamp[0], OldGammaRamp[1], OldGammaRamp[2] ) == -1 )
+		{
 			Com_Printf( "SDL_SetGammaRamp failed.\n" );
+		}
 	}
 }
 

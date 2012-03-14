@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-
 /*
  * ALIEN weapons
  *
@@ -33,7 +32,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_WDMG_MODIFIER         1.0f
-#define ADM(d)                      ((int)((float)d*ALIEN_WDMG_MODIFIER))
+#define ADM(d)                      ((int)((float)d * ALIEN_WDMG_MODIFIER ))
 
 #define ABUILDER_BUILD_REPEAT       500
 #define ABUILDER_CLAW_DMG           ADM(20)
@@ -106,11 +105,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LEVEL4_CHARGE_TIME          3000
 #define LEVEL4_CHARGE_CHARGE_TIME   1500
 #define LEVEL4_MIN_CHARGE_TIME      750
-#define LEVEL4_CHARGE_CHARGE_RATIO  (LEVEL4_CHARGE_TIME/LEVEL4_CHARGE_CHARGE_TIME)
+#define LEVEL4_CHARGE_CHARGE_RATIO  ( LEVEL4_CHARGE_TIME / LEVEL4_CHARGE_CHARGE_TIME )
 #define LEVEL4_CHARGE_REPEAT        1000
 #define LEVEL4_CHARGE_DMG           ADM(110)
-
-
 
 /*
  * ALIEN classes
@@ -123,10 +120,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_HLTH_MODIFIER         1.0f
-#define AHM(h)                      ((int)((float)h*ALIEN_HLTH_MODIFIER))
+#define AHM(h)                      ((int)((float)h * ALIEN_HLTH_MODIFIER ))
 
 #define ALIEN_VALUE_MODIFIER        1.0f
-#define AVM(h)                      ((int)((float)h*ALIEN_VALUE_MODIFIER))
+#define AVM(h)                      ((int)((float)h * ALIEN_VALUE_MODIFIER ))
 
 #define ABUILDER_SPEED              0.8f
 #define ABUILDER_VALUE              AVM(200)
@@ -188,8 +185,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define LEVEL4_REGEN                7
 #define LEVEL4_COST                 2
 
-
-
 /*
  * ALIEN buildables
  *
@@ -205,7 +200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define ALIEN_BHLTH_MODIFIER        1.0f
-#define ABHM(h)                     ((int)((float)h*ALIEN_BHLTH_MODIFIER))
+#define ABHM(h)                     ((int)((float)h * ALIEN_BHLTH_MODIFIER ))
 
 #define CREEP_BASESIZE              700
 #define CREEP_TIMEOUT               1000
@@ -295,8 +290,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define HOVEL_SPLASHRADIUS          200
 #define HOVEL_CREEPSIZE             120
 
-
-
 /*
  * ALIEN misc
  *
@@ -308,7 +301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define ALIEN_POISON_TIME           10000
 #define ALIEN_POISON_DMG            30
-#define ALIEN_POISON_DIVIDER        (1.0f/1.32f) //about 1.0/(time`th root of damage)
+#define ALIEN_POISON_DIVIDER        ( 1.0f / 1.32f ) //about 1.0/(time`th root of damage)
 
 #define ALIEN_SPAWN_REPEAT_TIME     10000
 
@@ -326,7 +319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define HUMAN_WDMG_MODIFIER         1.0f
-#define HDM(d)                      ((int)((float)d*HUMAN_WDMG_MODIFIER))
+#define HDM(d)                      ((int)((float)d * HUMAN_WDMG_MODIFIER ))
 
 #define BLASTER_REPEAT              600
 #define BLASTER_SPREAD              200
@@ -420,8 +413,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define HBUILD2_REPEAT              1000
 #define HBUILD2_DELAY               15000
 
-
-
 /*
  * HUMAN upgrades
  */
@@ -454,7 +445,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define MEDKIT_STARTUP_TIME         4000
 #define MEDKIT_STARTUP_SPEED        5
 
-
 /*
  * HUMAN buildables
  *
@@ -470,7 +460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define HUMAN_BHLTH_MODIFIER        1.0f
-#define HBHM(h)                     ((int)((float)h*HUMAN_BHLTH_MODIFIER))
+#define HBHM(h)                     ((int)((float)h * HUMAN_BHLTH_MODIFIER ))
 
 #define REACTOR_BASESIZE            1000
 #define REPEATER_BASESIZE           500
@@ -566,7 +556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define MIN_FALL_DISTANCE           30.0f //the fall distance at which fall damage kicks in
 #define MAX_FALL_DISTANCE           120.0f //the fall distance at which maximum damage is dealt
-#define AVG_FALL_DISTANCE           ((MIN_FALL_DISTANCE+MAX_FALL_DISTANCE)/2.0f)
+#define AVG_FALL_DISTANCE           (( MIN_FALL_DISTANCE + MAX_FALL_DISTANCE ) / 2.0f )
 
 #define HUMAN_MAXED                 900   //a human with a strong selection of weapons/upgrades
 #define HUMAN_MAX_CREDITS           2000
@@ -581,4 +571,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define DEFAULT_HUMAN_BUILDPOINTS   "100"
 
 #define DAMAGE_FRACTION_FOR_KILL    0.5f //how much damage players (versus structures) need to
-                                         //do to increment the stage kill counters
+//do to increment the stage kill counters

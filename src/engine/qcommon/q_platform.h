@@ -2,9 +2,9 @@
 ===========================================================================
 
 Daemon GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Daemon GPL Source Code (Daemon Source Code).  
+This file is part of the Daemon GPL Source Code (Daemon Source Code).
 
 Daemon Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,14 +19,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Daemon Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the Daemon Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following the 
-terms and conditions of the GNU General Public License which accompanied the Daemon 
-Source Code.  If not, please request a copy in writing from id Software at the address 
+In addition, the Daemon Source Code is also subject to certain additional terms.
+You should have received a copy of these additional terms immediately following the
+terms and conditions of the GNU General Public License which accompanied the Daemon
+Source Code.  If not, please request a copy in writing from id Software at the address
 below.
 
-If you have questions concerning this license or the applicable additional terms, you 
-may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, 
+If you have questions concerning this license or the applicable additional terms, you
+may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville,
 Maryland 20850 USA.
 
 ===========================================================================
@@ -47,14 +47,14 @@ Maryland 20850 USA.
 
 #else
 
-#if (defined(_M_IX86) || defined(__i386__)) && !defined(C_ONLY)
+#if ( defined( _M_IX86 ) || defined( __i386__ )) && !defined( C_ONLY )
 #define id386 1
 #if defined SIMD_3DNOW
 #define id386_3dnow  1
 #else
 #define id386_3dnow  0
 #endif
-#if defined(SIMD_SSE)			//|| 1 //|| defined(__SSE__)//defined(_MSC_VER)
+#if defined( SIMD_SSE )           //|| 1 //|| defined(__SSE__)//defined(_MSC_VER)
 #define id386_sse  1
 #include <xmmintrin.h>
 #define SSEVEC3_T
@@ -62,22 +62,22 @@ Maryland 20850 USA.
 #define id386_sse  0
 #endif
 #else
-#define id386	0
+#define id386   0
 #define id386_3dnow  0
 #define id386_sse    0
 #endif
 
-#if (defined(powerc) || defined(powerpc) || defined(ppc) || \
-	defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
+#if ( defined( powerc ) || defined( powerpc ) || defined( ppc ) || \
+        defined( __ppc ) || defined( __ppc__ )) && !defined( C_ONLY )
 #define idppc 1
-#if defined(__VEC__)
+#if defined( __VEC__ )
 #define idppc_altivec 1
 #ifdef MACOS_X  // Apple's GCC does this differently than the FSF.
-#define VECCONST_UINT8(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
-	(vector unsigned char) (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
+#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+        (vector unsigned char) ( a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p )
 #else
-#define VECCONST_UINT8(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
-	(vector unsigned char) {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p}
+#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+        (vector unsigned char) {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p }
 #endif
 #else
 #define idppc_altivec 0
@@ -87,7 +87,7 @@ Maryland 20850 USA.
 #define idppc_altivec 0
 #endif
 
-#if defined(__sparc__) && !defined(C_ONLY)
+#if defined( __sparc__ ) && !defined( C_ONLY )
 #define idsparc 1
 #else
 #define idsparc 0
@@ -103,7 +103,7 @@ Maryland 20850 USA.
 
 //================================================================= WIN64/32 ===
 
-#if defined(_WIN64) || defined(__WIN64__)
+#if defined( _WIN64 ) || defined( __WIN64__ )
 #undef idx64
 #define idx64 1
 
@@ -127,7 +127,7 @@ Maryland 20850 USA.
 #define ID_INLINE __inline
 #define PATH_SEP '\\'
 
-#if defined( __WIN64__ ) 
+#if defined( __WIN64__ )
 #define ARCH_STRING "x86_64"
 #elif defined _M_ALPHA
 #define ARCH_STRING "AXP"
@@ -139,7 +139,7 @@ Maryland 20850 USA.
 #define DLL_PREFIX ""
 #define DLL_EXT ".dll"
 
-#elif defined(__WIN32__) || defined(_WIN32)
+#elif defined( __WIN32__ ) || defined( _WIN32 )
 
 #define MAC_STATIC
 
@@ -177,7 +177,7 @@ Maryland 20850 USA.
 
 //============================================================== MAC OS X ===
 
-#if defined(MACOS_X) || defined(__APPLE_CC__)
+#if defined( MACOS_X ) || defined( __APPLE_CC__ )
 
 #define MAC_STATIC
 
@@ -267,7 +267,7 @@ Maryland 20850 USA.
 
 //=================================================================== BSD ===
 
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+#if defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __NetBSD__ ) || defined( __DragonFly__ )
 
 #include <sys/types.h>
 #include <machine/endian.h>
@@ -275,16 +275,16 @@ Maryland 20850 USA.
 #define MAC_STATIC
 
 #ifndef __BSD__
-  #define __BSD__
+#define __BSD__
 #endif
 
-#if defined(__FreeBSD__)
+#if defined( __FreeBSD__ )
 #define OS_STRING "freebsd"
-#elif defined(__OpenBSD__)
+#elif defined( __OpenBSD__ )
 #define OS_STRING "openbsd"
-#elif defined(__NetBSD__)
+#elif defined( __NetBSD__ )
 #define OS_STRING "netbsd"
-#elif defined(__DragonFly__)
+#elif defined( __DragonFly__ )
 #define OS_STRING "dragonfly"
 #endif
 
@@ -408,9 +408,9 @@ Maryland 20850 USA.
 #endif
 
 //endianness
-short ShortSwap (short l);
-int LongSwap (int l);
-float FloatSwap (float f);
+short ShortSwap ( short l );
+int LongSwap ( int l );
+float FloatSwap ( float f );
 
 #if defined( Q3_BIG_ENDIAN ) && defined( Q3_LITTLE_ENDIAN )
 #error "Endianness defined as both big and little"

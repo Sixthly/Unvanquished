@@ -2,9 +2,9 @@
 ===========================================================================
 
 Daemon GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Daemon GPL Source Code (Daemon Source Code).  
+This file is part of the Daemon GPL Source Code (Daemon Source Code).
 
 Daemon Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,24 +19,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Daemon Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the Daemon Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following the 
-terms and conditions of the GNU General Public License which accompanied the Daemon 
-Source Code.  If not, please request a copy in writing from id Software at the address 
+In addition, the Daemon Source Code is also subject to certain additional terms.
+You should have received a copy of these additional terms immediately following the
+terms and conditions of the GNU General Public License which accompanied the Daemon
+Source Code.  If not, please request a copy in writing from id Software at the address
 below.
 
-If you have questions concerning this license or the applicable additional terms, you 
-may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, 
+If you have questions concerning this license or the applicable additional terms, you
+may contact in writing id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville,
 Maryland 20850 USA.
 
 ===========================================================================
 */
 
-
 /*****************************************************************************
- * name:		be_aas_def.h
+ * name:        be_aas_def.h
  *
- * desc:		AAS
+ * desc:        AAS
  *
  *
  *****************************************************************************/
@@ -66,6 +65,7 @@ typedef struct aas_link_s
 	int             entnum;
 	int             areanum;
 	struct aas_link_s *next_ent, *prev_ent;
+
 	struct aas_link_s *next_area, *prev_area;
 } aas_link_t;
 
@@ -75,6 +75,7 @@ typedef struct bsp_link_s
 	int             entnum;
 	int             leafnum;
 	struct bsp_link_s *next_ent, *prev_ent;
+
 	struct bsp_link_s *next_leaf, *prev_leaf;
 } bsp_link_t;
 
@@ -124,37 +125,39 @@ typedef struct aas_settings_s
 //routing cache
 typedef struct aas_routingcache_s
 {
-	int             size;		//size of the routing cache
-	float           time;		//last time accessed or updated
-	int             cluster;	//cluster the cache is for
-	int             areanum;	//area the cache is created for
-	vec3_t          origin;		//origin within the area
-	float           starttraveltime;	//travel time to start with
-	int             travelflags;	//combinations of the travel flags
+	int             size;       //size of the routing cache
+	float           time;       //last time accessed or updated
+	int             cluster;    //cluster the cache is for
+	int             areanum;    //area the cache is created for
+	vec3_t          origin;     //origin within the area
+	float           starttraveltime;    //travel time to start with
+	int             travelflags;    //combinations of the travel flags
 	struct aas_routingcache_s *prev, *next;
-	unsigned char  *reachabilities;	//reachabilities used for routing
-	unsigned short int traveltimes[1];	//travel time for every area (variable sized)
+
+	unsigned char  *reachabilities; //reachabilities used for routing
+	unsigned short int traveltimes[1];  //travel time for every area (variable sized)
 } aas_routingcache_t;
 
 //fields for the routing algorithm
 typedef struct aas_routingupdate_s
 {
 	int             cluster;
-	int             areanum;	//area number of the update
-	vec3_t          start;		//start point the area was entered
-	unsigned short int tmptraveltime;	//temporary travel time
-	unsigned short int *areatraveltimes;	//travel times within the area
-	qboolean        inlist;		//true if the update is in the list
+	int             areanum;    //area number of the update
+	vec3_t          start;      //start point the area was entered
+	unsigned short int tmptraveltime;   //temporary travel time
+	unsigned short int *areatraveltimes;    //travel times within the area
+	qboolean        inlist;     //true if the update is in the list
 	struct aas_routingupdate_s *next;
+
 	struct aas_routingupdate_s *prev;
 } aas_routingupdate_t;
 
 //reversed reachability link
 typedef struct aas_reversedlink_s
 {
-	int             linknum;	//the aas_areareachability_t
-	int             areanum;	//reachable from this area
-	struct aas_reversedlink_s *next;	//next link
+	int             linknum;    //the aas_areareachability_t
+	int             areanum;    //reachable from this area
+	struct aas_reversedlink_s *next;    //next link
 } aas_reversedlink_t;
 
 //reversed area reachability
@@ -170,9 +173,9 @@ typedef struct aas_reversedreachability_s
 
 typedef struct aas_s
 {
-	int             loaded;		//true when an AAS file is loaded
-	int             initialized;	//true when AAS has been initialized
-	int             savefile;	//set true when file should be saved
+	int             loaded;     //true when an AAS file is loaded
+	int             initialized;    //true when AAS has been initialized
+	int             savefile;   //set true when file should be saved
 	int             bspchecksum;
 	//current time
 	float           time;
@@ -226,10 +229,10 @@ typedef struct aas_s
 	int             reachabilityareas;
 	float           reachabilitytime;
 	//enities linked in the areas
-	aas_link_t     *linkheap;	//heap with link structures
-	int             linkheapsize;	//size of the link heap
-	aas_link_t     *freelinks;	//first free link
-	aas_link_t    **arealinkedentities;	//entities linked into areas
+	aas_link_t     *linkheap;   //heap with link structures
+	int             linkheapsize;   //size of the link heap
+	aas_link_t     *freelinks;  //first free link
+	aas_link_t    **arealinkedentities; //entities linked into areas
 	//entities
 	int             maxentities;
 	int             maxclients;
@@ -247,9 +250,9 @@ typedef struct aas_s
 	//reversed reachability links
 	aas_reversedreachability_t *reversedreachability;
 	//travel times within the areas
-	unsigned short ***areatraveltimes;
+	unsigned short ** *areatraveltimes;
 	//array of size numclusters with cluster cache
-	aas_routingcache_t ***clusterareacache;
+	aas_routingcache_t ** *clusterareacache;
 	aas_routingcache_t **portalcache;
 	//maximum travel time through portals
 	int            *portalmaxtraveltimes;
@@ -306,4 +309,4 @@ typedef struct aas_s
 // Ridah, route-tables
 #include "be_aas_routetable.h"
 
-#endif							//BSPCINCLUDE
+#endif                          //BSPCINCLUDE
