@@ -4751,7 +4751,7 @@ void CL_InitRef( const char *renderer )
 	ri.FS_FTell = FS_FTell;
 	ri.FS_Read = FS_Read;
 	ri.FS_FOpenFileRead = FS_FOpenFileRead;
-// 	ri.FS_FSCloseFile = FS_FCloseFile;
+	ri.FS_FCloseFile = FS_FCloseFile;
 
 	ri.Cvar_Get = Cvar_Get;
 	ri.Cvar_Set = Cvar_Set;
