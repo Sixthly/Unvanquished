@@ -1626,6 +1626,8 @@ extern  vmCvar_t            cg_emoticons;
 
 extern  vmCvar_t            cg_chatTeamPrefix;
 
+extern  vmCvar_t            cg_translateCenterPrint;
+
 extern vmCvar_t             cg_animSpeed;
 extern vmCvar_t             cg_animBlend;
 extern vmCvar_t             cg_core;
@@ -1658,9 +1660,19 @@ qboolean   CG_FileExists( char *filename );
 void       CG_RemoveNotifyLine( void );
 void       CG_AddNotifyText( void );
 qboolean   CG_GetRangeMarkerPreferences( qboolean *drawSurface, qboolean *drawIntersection,
-    qboolean *drawFrontline, float *surfaceOpacity,
-    float *lineOpacity, float *lineThickness );
+qboolean   *drawFrontline, float *surfaceOpacity,
+float      *lineOpacity, float *lineThickness );
 void       CG_UpdateBuildableRangeMarkerMask( void );
+void       LoadFace(const char *fileName, int pointSize, const char *name, face_t *face);
+void       FreeFace(face_t *face);
+void       LoadGlyph(face_t *face, const char *str, int img, glyphInfo_t *glyphInfo);
+void       FreeGlyph(face_t *face, int img, glyphInfo_t *glyphInfo);
+void       Glyph(fontInfo_t *font, face_t *face, const char *str, glyphInfo_t *glyph);
+void       FreeCachedGlyphs(face_t *face);
+void       Gettext ( char *buffer, const char *msgid, int bufferLength );
+char       *gettext ( const char *msgid );
+
+
 
 //
 // cg_view.c

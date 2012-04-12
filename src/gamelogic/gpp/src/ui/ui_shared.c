@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SCROLL_TIME_ADJUSTOFFSET 40
 #define SCROLL_TIME_FLOOR        20
 
+void FreeFace(face_t *face);
+void FreeCachedGlyphs(face_t *face);
+
 typedef struct scrollInfo_s
 {
 	int       nextScrollTime;
@@ -86,10 +89,26 @@ static ID_INLINE qboolean Item_IsListBox( itemDef_t *item );
 static void               Item_ListBox_SetStartPos( itemDef_t *item, int startPos );
 void                      Menu_SetupKeywordHash( void );
 int                       BindingIDFromName( const char *name );
-qboolean                  Item_Bind_HandleKey( itemDef_t *item, int key, qboolean down );
+qboolean                  Item_Bind_HandleKey( itemDef_t *item, int key, int state );
 itemDef_t                 *Menu_SetPrevCursorItem( menuDef_t *menu );
 itemDef_t                 *Menu_SetNextCursorItem( menuDef_t *menu );
 static qboolean           Menu_OverActiveItem( menuDef_t *menu, float x, float y );
+
+
+/*
+===============
+UIS_Shutdown
+===============
+*/
+void UIS_Shutdown( void )
+{
+  FreeCachedGlyphs( &DC->Assets.dynFont );
+  FreeFace( &DC->Assets.dynFont );
+  FreeCachedGlyphs( &DC->Assets.smallDynFont );
+  FreeFace( &DC->Assets.smallDynFont );
+  FreeCachedGlyphs( &DC->Assets.bigDynFont );
+  FreeFace( &DC->Assets.bigDynFont );
+}
 
 /*
 ===============
@@ -946,6 +965,23 @@ qboolean String_Parse( char **p, const char **out )
 	}
 
 	return qfalse;
+}
+
+/*
+=================
+PC_String_Parse_
+=================
+*/
+qboolean PC_String_Parse_( int handle, const char **out )
+{
+  pc_token_t token;
+
+  if( !trap_Parse_ReadToken( handle, &token ) )
+    return qfalse;
+
+  *( out ) = String_Alloc( _(token.string) );
+
+  return qtrue;
 }
 
 /*
@@ -2025,6 +2061,30 @@ void Script_playLooped( itemDef_t *item, char **args )
 	}
 }
 
+static int UI_UTF8Width( face_t *face, const char *str )
+{
+  if( DC->getCVarValue( "ui_ascii" ) )
+    return 1;
+
+  if( !face )
+    return 1;
+
+  return Q_UTF8Width( str );
+}
+
+glyphInfo_t *UI_Glyph( fontInfo_t *font, face_t *face, const char *str )
+{
+  static glyphInfo_t glyphs[8];
+  static int index = 0;
+  glyphInfo_t *glyph = &glyphs[index++ & 7];
+
+  if( !str || !*str || !face || UI_UTF8Width( face, str ) <= 1 )
+    return &font->glyphs[ (int)*str ];
+
+  DC->glyph( font, face, str, glyph );
+  return glyph;
+}
+
 static ID_INLINE float UI_EmoticonHeight( fontInfo_t *font, float scale )
 {
 	return font->glyphs[( int ) '[' ].height * scale * font->glyphScale;
@@ -2179,10 +2239,28 @@ static ID_INLINE fontInfo_t *UI_FontForScale( float scale )
 	}
 }
 
+static ID_INLINE fontInfo_t *UI_FaceForScale( float scale )
+{
+	if ( scale <= DC->smallFontScale )
+	{
+		return &DC->Assets.smallDynFont;
+	}
+	else if ( scale >= DC->bigFontScale )
+	{
+		return &DC->Assets.bigDynFont;
+	}
+	else
+	{
+		return &DC->Assets.textDynFont;
+	}
+}
+
+
 float UI_Char_Width( const char **text, float scale )
 {
 	glyphInfo_t *glyph;
 	fontInfo_t  *font;
+	face_t      *face;
 	int         emoticonLen;
 	qboolean    emoticonEscaped;
 	int         emoticonWidth;
@@ -2202,6 +2280,7 @@ float UI_Char_Width( const char **text, float scale )
 		}
 
 		font = UI_FontForScale( scale );
+		face = UI_FaceForScale( scale );
 
 		if ( UI_Text_IsEmoticon( *text, &emoticonEscaped, &emoticonLen,
 		                         NULL, &emoticonWidth ) )
@@ -2217,9 +2296,9 @@ float UI_Char_Width( const char **text, float scale )
 			}
 		}
 
-		( *text ) ++;
+		( *text ) = Q_UTFWidth( face, text );
 
-		glyph = &font->glyphs[( int ) **text ];
+		glyph = UI_Glyph( font, face, s );
 		return glyph->xSkip * DC->aspectScale * scale * font->glyphScale;
 	}
 
@@ -2254,6 +2333,7 @@ float UI_Text_Height( const char *text, float scale )
 	float       useScale;
 	const char  *s = text;
 	fontInfo_t  *font = UI_FontForScale( scale );
+	faceInfo_t  *face = UI_FaceForScale( scale )
 
 	useScale = scale * font->glyphScale;
 	max = 0;
@@ -2269,14 +2349,14 @@ float UI_Text_Height( const char *text, float scale )
 			}
 			else
 			{
-				glyph = &font->glyphs[( int ) * s ];
+				glyph = UI_Glyph( font, face, s );
 
 				if ( max < glyph->height )
 				{
 					max = glyph->height;
 				}
 
-				s++;
+				s += UI_UTF8Width( face, s );
 			}
 		}
 	}
@@ -2378,6 +2458,7 @@ static void UI_Text_Paint_Generic( float x, float y, float scale, float gapAdjus
 	int         count = 0;
 	vec4_t      newColor;
 	fontInfo_t  *font = UI_FontForScale( scale );
+	face_t      *face = UI_FaceForScale( scale );
 	glyphInfo_t *glyph;
 	float       useScale;
 	qhandle_t   emoticonHandle = 0;
@@ -2413,7 +2494,7 @@ static void UI_Text_Paint_Generic( float x, float y, float scale, float gapAdjus
 	{
 		const char *t = s;
 		float      charWidth = UI_Char_Width( &t, scale );
-		glyph = &font->glyphs[( int ) * s ];
+		glyph = UI_Glyph( font, face, s );
 
 		if ( maxX && charWidth + x > *maxX )
 		{
@@ -2508,8 +2589,8 @@ static void UI_Text_Paint_Generic( float x, float y, float scale, float gapAdjus
 		}
 
 		x += ( glyph->xSkip * DC->aspectScale * useScale ) + gapAdjust;
-		s++;
-		count++;
+		s = += UI_UTF8Width( face, s );
+		count += UI_UTF8Width( face, s );
 	}
 
 	if ( maxX )
@@ -5832,7 +5913,7 @@ qboolean Display_KeyBindPending( void )
 	return g_waitingForKey;
 }
 
-qboolean Item_Bind_HandleKey( itemDef_t *item, int key, qboolean down )
+qboolean Item_Bind_HandleKey( itemDef_t *item, int key, int state )
 {
 	int id;
 	int i;

@@ -234,6 +234,7 @@ vmCvar_t        cg_voice;
 vmCvar_t        cg_emoticons;
 
 vmCvar_t        cg_chatTeamPrefix;
+vmCvar_t        cg_translateCenterPrint;
 
 vmCvar_t        cg_animSpeed;
 vmCvar_t        cg_animBlend;
@@ -390,7 +391,8 @@ static cvarTable_t cvarTable[] =
 	{ &cg_animBlend,                   "cg_animblend",                   "5.0",          CVAR_ARCHIVE                 },
 	{ &cg_core,                        "cg_core",                        "3",            CVAR_ARCHIVE                 },
 
-	{ &cg_chatTeamPrefix,              "cg_chatTeamPrefix",              "1",            CVAR_ARCHIVE                 }
+	{ &cg_chatTeamPrefix,              "cg_chatTeamPrefix",              "1",            CVAR_ARCHIVE                 },
+        { &cg_translateCenterPrint,        "cg_translateCenterPrint",        "0",            CVAR_ARCHIVE                 }
 };
 
 static int         cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[ 0 ] );
@@ -1457,6 +1459,44 @@ qboolean CG_Asset_Parse( int handle )
 			continue;
 		}
 
+		// dynFont
+		if( Q_stricmp( token.string, "dynFont" ) == 0 )
+		{
+		int pointSize;
+
+		if( !PC_String_Parse( handle, &tempStr ) || !PC_Int_Parse( handle, &pointSize ) )
+			return qfalse;
+
+		cgDC.loadFace( tempStr, pointSize, tempStr, &cgDC.Assets.dynFont );
+		continue;
+		}
+
+		// smallDynFont
+		if( Q_stricmp( token.string, "smallDynFont" ) == 0 )
+		{
+		int pointSize;
+
+		if( !PC_String_Parse( handle, &tempStr ) || !PC_Int_Parse( handle, &pointSize ) )
+			return qfalse;
+
+		cgDC.loadFace( tempStr, pointSize, tempStr, &cgDC.Assets.smallDynFont );
+		continue;
+		}
+
+		// dynFont
+		if( Q_stricmp( token.string, "bigDynFont" ) == 0 )
+		{
+		int pointSize;
+
+		if( !PC_String_Parse( handle, &tempStr ) || !PC_Int_Parse( handle, &pointSize ) )
+			return qfalse;
+
+		cgDC.loadFace( tempStr, pointSize, tempStr, &cgDC.Assets.bigDynFont );
+		continue;
+    }
+
+
+
 		// gradientbar
 		if ( Q_stricmp( token.string, "gradientbar" ) == 0 )
 		{
@@ -2085,6 +2125,13 @@ void CG_LoadHudMenu( void )
 	cgDC.addRefEntityToScene = &trap_R_AddRefEntityToScene;
 	cgDC.renderScene = &trap_R_RenderScene;
 	cgDC.registerFont = &trap_R_RegisterFont;
+	cgDC.loadFace = &LoadFace;
+	cgDC.freeFace = &FreeFace;
+	cgDC.loadGlyph = &LoadGlyph;
+	cgDC.freeGlyph = &FreeGlyph;
+	cgDC.glyph = &Glyph;
+	cgDC.freeCachedGlyphs = &FreeCachedGlyphs;
+
 	cgDC.ownerDrawItem = &CG_OwnerDraw;
 	cgDC.getValue = &CG_GetValue;
 	cgDC.ownerDrawVisible = &CG_OwnerDrawVisible;
@@ -2303,6 +2350,9 @@ void CG_Shutdown( void )
 {
 	// some mods may need to do cleanup work here,
 	// like closing files or archiving session data
+	FreeFace( &cgDC.Assets.dynFont );
+
+	UIS_Shutdown();
 }
 
 /*
@@ -2418,4 +2468,157 @@ qboolean CG_GetRangeMarkerPreferences( qboolean *drawSurface, qboolean *drawInte
 	}
 
 	return qfalse;
+}
+
+void LoadFace( const char *fileName, int pointSize, const char *name, face_t *face )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_LoadFace( fileName, pointSize, name, face );
+}
+
+void FreeFace( face_t *face )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_FreeFace( face );
+}
+
+void LoadGlyph( face_t *face, const char *str, int img, glyphInfo_t *glyphInfo )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_LoadGlyph( face, str, img, glyphInfo );
+}
+
+void FreeGlyph( face_t *face, int img, glyphInfo_t *glyphInfo )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_FreeGlyph( face, img, glyphInfo );
+}
+
+void Glyph( fontInfo_t *font, face_t *face, const char *str, glyphInfo_t *glyph )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_Glyph( font, face, str, glyph );
+}
+
+void FreeCachedGlyphs( face_t *face )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( engineState & 0x02 )
+    trap_R_FreeCachedGlyphs( face );
+}
+
+void Gettext( char *buffer, const char *msgid, int bufferLength )
+{
+  static int engineState = 0;
+
+  if( !( engineState & 0x01 ) )
+  {
+    char t[2];
+
+    engineState |= 0x01;
+
+    trap_Cvar_VariableStringBuffer( "\\IS_GETTEXT_SUPPORTED", t, 2 );
+
+    if( t[0] == '1' )
+      engineState |= 0x02;
+  }
+
+  if( !( engineState & 0x02 ) )
+    strncpy( buffer, msgid, bufferLength );
+  else
+    trap_Gettext( buffer, msgid, bufferLength );
+}
+
+char *gettext ( const char *msgid )
+{
+  static char string[8][32000];
+  static int  index = 0;
+  char        *buf = string[index++ & 7];
+
+  Gettext( buf, msgid, sizeof( *string ) );
+
+  return buf;
 }

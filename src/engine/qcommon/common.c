@@ -87,6 +87,7 @@ cvar_t *com_fixedtime;
 cvar_t *com_dropsim; // 0.0 to 1.0, simulated packet drops
 cvar_t *com_journal;
 cvar_t *com_maxfps;
+cvar_t *com_translatePrint;
 cvar_t *com_timedemo;
 cvar_t *com_sv_running;
 cvar_t *com_cl_running;
@@ -195,7 +196,7 @@ A raw string should NEVER be passed as fmt, because of "%f" type crashers.
 */
 int QDECL Com_VPrintf( const char *fmt, va_list argptr )
 {
-	char            msg[ MAXPRINTMSG ];
+	char            msg[ MAXPRINTMSG ], *str = msg;
 	static qboolean opening_qconsole = qfalse;
 
 	// FIXME TTimo
@@ -220,14 +221,19 @@ int QDECL Com_VPrintf( const char *fmt, va_list argptr )
 		return strlen( msg );
 	}
 
+	if ( com_translatePrint && com_translatePrint->integer )
+	{
+		str = Sys_Gettext( msg );
+	}
+
 	// echo to console if we're not a dedicated server
 	if ( com_dedicated && !com_dedicated->integer )
 	{
-		CL_ConsolePrint( msg );
+		CL_ConsolePrint( str );
 	}
 
 	// echo to dedicated console and early console
-	Sys_Print( msg );
+	Sys_Print( str );
 
 	// logfile
 	if ( com_logfile && com_logfile->integer )
@@ -260,11 +266,11 @@ int QDECL Com_VPrintf( const char *fmt, va_list argptr )
 
 		if ( logfile && FS_Initialized() )
 		{
-			FS_Write( msg, strlen( msg ), logfile );
+			FS_Write( str, strlen( str ), logfile );
 		}
 	}
 
-	return strlen( msg );
+	return strlen( str );
 }
 
 void QDECL Com_Printf( const char *fmt, ... )
@@ -1994,7 +2000,7 @@ void Com_InitHunkMemory( void )
 	if ( cv->integer < nMinAlloc )
 	{
 		s_hunkTotal = 1024 * 1024 * nMinAlloc;
-		Com_Printf( pMsg, nMinAlloc, s_hunkTotal / ( 1024 * 1024 ) );
+		Com_Printf( "%s %d %d", pMsg, nMinAlloc, s_hunkTotal / ( 1024 * 1024 ) );
 	}
 	else
 	{
@@ -3451,6 +3457,7 @@ void Com_Init( char *commandLine )
 
 	com_introPlayed = Cvar_Get( "com_introplayed", "0", CVAR_ARCHIVE );
 	com_ansiColor = Cvar_Get( "com_ansiColor", "0", CVAR_ARCHIVE );
+	com_translatePrint = Cvar_Get( "com_translatePrint", "0", CVAR_ARCHIVE );
 	com_logosPlaying = Cvar_Get( "com_logosPlaying", "0", CVAR_ROM );
 	com_recommendedSet = Cvar_Get( "com_recommendedSet", "0", CVAR_ARCHIVE );
 

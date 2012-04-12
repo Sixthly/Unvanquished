@@ -991,6 +991,7 @@ void SV_Init( void )
 	Cvar_Get( "sv_referencedPakNames", "", CVAR_SYSTEMINFO | CVAR_ROM );
 
 	// server vars
+	Cvar_SetIFlag( "\\IS_GETTEXT_SUPPORTED" );
 	sv_rconPassword = Cvar_Get( "rconPassword", "", CVAR_TEMP );
 	sv_privatePassword = Cvar_Get( "sv_privatePassword", "", CVAR_TEMP );
 	sv_fps = Cvar_Get( "sv_fps", "120", CVAR_TEMP );

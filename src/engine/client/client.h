@@ -49,6 +49,8 @@ Maryland 20850 USA.
 #include <speex/speex_preprocess.h>
 #endif
 
+#define DEFAULT_CONSOLE_FONT "fonts/roboto.ttf"
+
 #define GUIDKEY_FILE       "guid"
 
 // file containing our RSA public and private keys
@@ -421,7 +423,9 @@ typedef struct
 	qhandle_t   consoleShader;
 	qhandle_t   consoleShader2; // NERVE - SMF - merged from WolfSP
 	qboolean    useLegacyConsoleFont;
+	qboolean    useLegacyConsoleFace;
 	fontInfo_t  consoleFont;
+	face_t      consoleFace;
 
 	// www downloading
 	// in the static stuff since this may have to survive server disconnects

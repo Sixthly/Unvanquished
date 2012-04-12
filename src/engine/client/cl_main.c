@@ -176,6 +176,7 @@ cvar_t                 *cl_consoleFont;
 cvar_t                 *cl_consoleFontSize;
 cvar_t                 *cl_consoleFontKerning;
 cvar_t                 *cl_consolePrompt;
+cvar_t                 *cl_consoleDynFont;
 
 #ifdef USE_CRYPTO
 struct rsa_public_key  public_key;
@@ -1531,6 +1532,9 @@ void CL_ShutdownAll( void )
 	S_DisableSounds();
 	// download subsystem
 	DL_Shutdown();
+	// Clear Faces
+	re.FreeCachedGlyphs( &cls.consoleFace );
+	re.FreeFace( &cls.consoleFace );
 	// shutdown CGame
 	CL_ShutdownCGame();
 	// shutdown UI
@@ -2473,6 +2477,9 @@ void CL_Vid_Restart_f( void )
 	CL_ShutdownUI();
 	// shutdown the CGame
 	CL_ShutdownCGame();
+	// Free face data
+	re.FreeCachedGlyphs( &cls.consoleFace );
+	re.FreeFace( &cls.consoleFace );
 	// shutdown the renderer and clear the renderer interface
 	CL_ShutdownRef();
 	// client is no longer pure untill new checksums are sent
@@ -4339,6 +4346,17 @@ qboolean CL_InitRenderer( void )
 		FS_FCloseFile( f );
 	}
 
+	if ( cl_consoleDynFont->string[0] )
+	{
+		if ( FS_FOpenFileByMode( cl_consoleDynFont->string, &f, FS_READ ) >= 0 )
+		{
+			re.LoadFace( cl_consoleDynFont->string, cl_consoleFontSize->integer, cl_consoleDynFont->string, &cls.consoleFace );
+			cls.useLegacyConsoleFace = qfalse;
+		}
+
+		FS_FCloseFile( f );
+	}
+
 	cls.whiteShader = re.RegisterShader( "white" );
 	cls.consoleShader = re.RegisterShader( "console" );
 	cls.consoleShader2 = re.RegisterShader( "console2" );
@@ -4729,6 +4747,11 @@ void CL_InitRef( const char *renderer )
 	ri.FS_ListFiles = FS_ListFiles;
 	ri.FS_FileIsInPAK = FS_FileIsInPAK;
 	ri.FS_FileExists = FS_FileExists;
+	ri.FS_Seek = FS_Seek;
+	ri.FS_FTell = FS_FTell;
+	ri.FS_Read = FS_Read;
+	ri.FS_FOpenFileRead = FS_FOpenFileRead;
+// 	ri.FS_FSCloseFile = FS_FCloseFile;
 
 	ri.Cvar_Get = Cvar_Get;
 	ri.Cvar_Set = Cvar_Set;
@@ -5004,6 +5027,9 @@ void CL_Init( void )
 	//
 	// register our variables
 	//
+
+	Cvar_SetIFlag( "\\IS_GETTEXT_SUPPORTED" );
+
 	cl_renderer = Cvar_Get( "cl_renderer", "GL3,GL", CVAR_ARCHIVE | CVAR_LATCH );
 
 	cl_noprint = Cvar_Get( "cl_noprint", "0", 0 );
@@ -5098,10 +5124,11 @@ void CL_Init( void )
 	// ~ and `, as keys and characters
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE );
 
-	cl_consoleFont = Cvar_Get( "cl_consoleFont", "", CVAR_ARCHIVE | CVAR_LATCH );
+	cl_consoleFont = Cvar_Get( "cl_consoleFont", DEFAULT_CONSOLE_FONT, CVAR_ARCHIVE | CVAR_LATCH );
 	cl_consoleFontSize = Cvar_Get( "cl_consoleFontSize", "16", CVAR_ARCHIVE | CVAR_LATCH );
 	cl_consoleFontKerning = Cvar_Get( "cl_consoleFontKerning", "0", CVAR_ARCHIVE );
 	cl_consolePrompt = Cvar_Get( "cl_consolePrompt", "^3->", CVAR_ARCHIVE );
+	cl_consoleDynFont = Cvar_Get( "cl_consoleDynFont", DEFAULT_CONSOLE_FONT, CVAR_ARCHIVE | CVAR_LATCH );
 
 	cl_gamename = Cvar_Get( "cl_gamename", GAMENAME_FOR_MASTER, CVAR_TEMP );
 	cl_altTab = Cvar_Get( "cl_altTab", "1", CVAR_ARCHIVE );
