@@ -1555,12 +1555,6 @@ static void IN_ProcessEvents( void )
 				{
 					Com_QueueEvent( 0, SE_KEY, key, qtrue, 0, NULL );
 				}
-
-				if ( character )
-				{
-					Com_QueueEvent( 0, SE_CHAR, *character, 0, 0, NULL );
-				}
-
 				break;
 
 			case SDL_KEYUP:
