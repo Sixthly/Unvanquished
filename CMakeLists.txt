@@ -42,53 +42,87 @@ set( CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "" ) # Need this to get rid of -rdynami
 set( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" )
 
 
+# Figure out what is available on the system. Set default options based on this.
+set( CURSES_NEED_NCURSES 1 ) # Tells FindCurses that ncurses is required
+
+find_package( OpenGL )
+find_package( SDL )
+find_package( JPEG )
+find_package( PNG )
+find_package( Freetype )
+find_package( GLEW )
+find_package( WebP )
+find_package( CursesW )
+find_package( Curses )
+find_package( GMP )
+find_package( Nettle )
+find_package( ZLIB )
+find_package( CURL )
+find_package( OpenAL )
+find_package( Speex )
+find_package( Vorbis )
+find_package( Theora )
+find_package( TinyXML )
+find_package( xvid )
+find_package( BZip2 )
+find_package( GLib2 )
+find_package( ICONV )
+
 # Options
-option( BUILD_CLIENT         "Build Daemon client"                         1 )
-option( BUILD_SERVER         "Build Daemonded server"                      1 )
+cmake_dependent_option( BUILD_CLIENT "Build Daemon client" 1
+  "SDL_FOUND AND GMP_FOUND AND OPENGL_FOUND AND PNG_FOUND AND FREETYPE_FOUND" 0 )
+cmake_dependent_option( BUILD_SERVER "Build Daemonded server" 1
+  "GMP_FOUND AND ( ICONV_FOUND OR SDL_FOUND )" 0 )
 option( GAME_LIB             "Build game logic libraries"                  1 )
 option( GAME_QVM             "Build game logic QVM files"                  1 )
-option( BUILD_MASTER         "Build master server"                         1 )
 option( BUILD_DAEMONMAP      "Build Mapping tool"                          0 )
 
 option( ENABLE_W_ALL         "Use -Wall"                                   0 )
 option( ENABLE_WARNINGS      "Enable security & code-checking warning options" 1 )
 option( ENABLE_HARDENING     "Enable security hardening options"            1 )
 
-cmake_dependent_option( BUILD_OLD_RENDERER   "Build old renderer library"                            1 BUILD_CLIENT                   0 )
-cmake_dependent_option( BUILD_NEW_RENDERER   "Build new renderer library"                            1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_OPENAL           "Use OpenAL"                                            1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_CODEC_VORBIS     "Compile with support for Vorbis"                       1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_MUMBLE           "Compile with support for Mumble"                       1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_WEBP             "Compile with WebP loader"                              1 BUILD_CLIENT                   0 ) # technically, any renderer, not client
-cmake_dependent_option( USE_VOIP             "Compile with VOIP support"                             1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_CIN_XVID         "Encode videos with XViD"                               1 BUILD_CLIENT                   0 )
-cmake_dependent_option( USE_INTERNAL_SDL     "Use SDL files included with Unvanquished"              0 BUILD_CLIENT                   0 )
+cmake_dependent_option( BUILD_OLD_RENDERER   "Build old renderer library"                            1 BUILD_CLIENT                    0 )
+cmake_dependent_option( BUILD_NEW_RENDERER   "Build new renderer library"                            1 BUILD_CLIENT                    0 )
+cmake_dependent_option( USE_OPENAL           "Use OpenAL"                                            1 "BUILD_CLIENT AND OPENAL_FOUND" 0 )
+cmake_dependent_option( USE_CODEC_VORBIS     "Compile with support for Vorbis"                       1
+                                                                          "BUILD_CLIENT AND VORBIS_FOUND AND THEORA_FOUND"             0 )
+cmake_dependent_option( USE_MUMBLE           "Compile with support for Mumble"                       1 BUILD_CLIENT                    0 )
+cmake_dependent_option( USE_WEBP             "Compile with WebP loader"                              1
+                                                           "( BUILD_NEW_RENDERER OR BUILD_OLD_RENDERER ) AND WEBP_FOUND"               0 )
+cmake_dependent_option( USE_VOIP             "Compile with VOIP support"                             1 BUILD_CLIENT                    0 )
+cmake_dependent_option( USE_CIN_XVID         "Play XViD cinematics"                                  1 "BUILD_CLIENT AND XVID_FOUND"   0 )
+cmake_dependent_option( USE_INTERNAL_SDL     "Use SDL files included with Unvanquished"              0 BUILD_CLIENT                    0 )
 
-cmake_dependent_option( USE_CPUINFO          "Use CPUInfo (if compilation fails, then disable this)" 1 "BUILD_CLIENT OR BUILD_SERVER" 0 )
-cmake_dependent_option( USE_CURSES           "Use the curses console"                                1 "BUILD_CLIENT OR BUILD_SERVER" 0 )
-cmake_dependent_option( USE_PHYSICS          "Compile with Newton Physics"                           0 "BUILD_CLIENT OR BUILD_SERVER" 0 )
-cmake_dependent_option( USE_INTERNAL_CRYPTO  "Use internal crypto (nettle)"                          0 "BUILD_CLIENT OR BUILD_SERVER" 0 )
-cmake_dependent_option( NO_UNTRUSTED_PLUGINS "Don't load native plugins from the user dir"           1 "BUILD_CLIENT OR BUILD_SERVER" 0 )
+cmake_dependent_option( USE_CPUINFO          "Use CPUInfo (if compilation fails, then disable this)" 1 "BUILD_CLIENT OR BUILD_SERVER"  0 )
+cmake_dependent_option( USE_CURSES           "Use the curses console"                                1
+                                                             "( BUILD_CLIENT OR BUILD_SERVER ) AND ( CURSESW_FOUND OR CURSES_FOUND )"  0 )
+cmake_dependent_option( USE_PHYSICS          "Compile with Newton Physics"                           0
+                                                                                 "( BUILD_CLIENT OR BUILD_SERVER ) AND TINYXML_FOUND"  0 )
+cmake_dependent_option( USE_INTERNAL_CRYPTO  "Use internal crypto (nettle)"                          0
+                                                                                  "( BUILD_CLIENT OR BUILD_SERVER ) AND NETTLE_FOUND"  1 )
+cmake_dependent_option( NO_UNTRUSTED_PLUGINS "Don't load native plugins from the user dir"           1 "BUILD_CLIENT OR BUILD_SERVER"  0 )
 
 cmake_dependent_option( USE_INTERNAL_JPEG    "Use JPEG files included with Unvanquished"             0
-                                                                        "BUILD_OLD_RENDERER OR BUILD_NEW_RENDERER OR BUILD_DAEMONMAP" 0 )
+                                                                        "( BUILD_OLD_RENDERER OR BUILD_NEW_RENDERER OR BUILD_DAEMONMAP ) AND JPEG_FOUND" 1 )
 
 cmake_dependent_option( USE_GLSL_OPTIMIZER   "Compile with GLSL Optimizer"                           1 BUILD_NEW_RENDERER             0 )
 
 cmake_dependent_option( HAVE_BZIP2           "Compile with BZip2 support"                            0 "HAVE_BZIP2"                   0 )
 
-cmake_dependent_option( BUILD_GAME_GPP       "Build Tremulous GPP game logic"              1 "GAME_LIB OR GAME_QVM" 0 )
-cmake_dependent_option( QVM_DEBUG            "Enable (some) QVM debugging"                 1 GAME_QVM         0 )
-cmake_dependent_option( GAME_LIB_LLVM        "Use LLVM, not shared libs, for game logic"   0 GAME_LIB         0 )
+cmake_dependent_option( BUILD_GAME_GPP       "Build Tremulous GPP game logic"              1 "GAME_LIB OR GAME_QVM"                   0 )
+cmake_dependent_option( QVM_DEBUG            "Enable (some) QVM debugging"                 1 GAME_QVM                                 0 )
+cmake_dependent_option( GAME_LIB_LLVM        "Use LLVM, not shared libs, for game logic"   0 GAME_LIB                                 0 )
 
-cmake_dependent_option( USE_OPENAL_DLOPEN    "Use dlopen to load OpenAL"                   1 USE_OPENAL       0 )
-cmake_dependent_option( USE_CIN_THEORA       "Compile with support for Theora"             1 USE_CODEC_VORBIS 0 )
-cmake_dependent_option( USE_INTERNAL_SPEEX   "Use internal speex"                          0 USE_VOIP         0 )
+cmake_dependent_option( USE_OPENAL_DLOPEN    "Use dlopen to load OpenAL"                   1 "USE_OPENAL AND OPENAL_FOUND"            0 )
+cmake_dependent_option( USE_CIN_THEORA       "Compile with support for Theora"             1 USE_CODEC_VORBIS                         0 )
+cmake_dependent_option( USE_INTERNAL_SPEEX   "Use internal speex"                          0 USE_VOIP                                 0 )
 
-cmake_dependent_option( ENABLE_W_EXTRA       "Use -Wextra"                                 0 ENABLE_W_ALL     0 )
+cmake_dependent_option( ENABLE_W_EXTRA       "Use -Wextra"                                 0 ENABLE_W_ALL                             0 )
 
-cmake_dependent_option( ENABLE_FSTACKPROT    "Enable stack protection if available"        1 ENABLE_HARDENING 0 )
-cmake_dependent_option( ENABLE_RELRO         "Enable relro & bindnow if available"         1 ENABLE_HARDENING 0 )
+cmake_dependent_option( ENABLE_FSTACKPROT    "Enable stack protection if available"        1 ENABLE_HARDENING                         0 )
+cmake_dependent_option( ENABLE_RELRO         "Enable relro & bindnow if available"         1 ENABLE_HARDENING                         0 )
+cmake_dependent_option( USE_SDL_ICONV        "Use sdl_iconv instead of linking to iconv"   1
+                                                                           "( BUILD_CLIENT OR BUILD_SERVER ) AND SDL_FOUND"           0 )
 
 mark_as_advanced( GAME_LIB_LLVM LLVM_CONFIG ENABLE_FSTACKPROT ENABLE_RELRO )
 
@@ -640,8 +674,8 @@ set( CGAMEGPP_BASE
   ${GPP_DIR}/src/cgame/cg_tutorial.c
   ${GPP_DIR}/src/ui/ui_shared.c
   ${GPP_DIR}/src/ui/ui_utf8.c
-  ${MOUNT_DIR}/engine/qcommon/./q_math.c
-  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
+  ${MOUNT_DIR}/engine/qcommon/q_math.c
+  ${MOUNT_DIR}/engine/qcommon/q_shared.c
 )
 
 set( CGAMEGPP_SO
@@ -682,8 +716,8 @@ set( GAMEGPP_BASE
   ${GPP_DIR}/src/game/g_weapon.c
   ${GPP_DIR}/src/game/g_admin.c
   ${GPP_DIR}/src/game/g_namelog.c
-  ${MOUNT_DIR}/engine/qcommon/./q_math.c
-  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
+  ${MOUNT_DIR}/engine/qcommon/q_math.c
+  ${MOUNT_DIR}/engine/qcommon/q_shared.c
 )
 
 set( GAMEGPP_SO
@@ -701,11 +735,11 @@ set( UIGPP_BASE
   ${GPP_DIR}/src/ui/ui_atoms.c
   ${GPP_DIR}/src/ui/ui_shared.c
   ${GPP_DIR}/src/ui/ui_gameinfo.c
+  ${GPP_DIR}/src/ui/ui_utf8.c
   ${GPP_DIR}/src/game/bg_misc.c
   ${GPP_DIR}/src/game/bg_lib.c
-  ${MOUNT_DIR}/engine/qcommon/./q_math.c
-  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
-  ${GPP_DIR}/src/ui/ui_utf8.c
+  ${MOUNT_DIR}/engine/qcommon/q_math.c
+  ${MOUNT_DIR}/engine/qcommon/q_shared.c
 )
 
 set( UIGPP_SO
@@ -1550,6 +1584,13 @@ if( BUILD_CLIENT )
     target_link_libraries( client ${LLVM_LIBS} )
   endif()
 
+  if( USE_SDL_ICONV )
+    set_property( TARGET client APPEND PROPERTY COMPILE_DEFINITIONS HAVE_SDL )
+  else()
+    include_directories( ${ICONV_INCLUDE_DIR} )
+    target_link_libraries( client ${ICONV_LIBRARY} )
+  endif()
+
   if( MINGW )
     target_link_libraries( client ${SDLMAIN_LIBRARY} )
   endif()
@@ -1616,7 +1657,6 @@ if( BUILD_SERVER )
   endif()
 
   # The following section finds the REQUIRED dependencies and makes them available to the target
-  find_package( SDL REQUIRED )
   find_package( GMP REQUIRED )
   find_package( ZLIB REQUIRED )
   find_package( CURL REQUIRED )
@@ -1630,8 +1670,8 @@ if( BUILD_SERVER )
     target_link_libraries( server ${NETTLE_LIBRARIES} )
   endif()
 
-  include_directories( ${SDL_INCLUDE_DIR} ${GMP_INCLUDE_DIR} ${ZLIB_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} )
-  target_link_libraries( server ${SDL_LIBRARY} ${GMP_LIBRARIES} ${ZLIB_LIBRARIES} ${CURL_LIBRARIES} )
+  include_directories( ${GMP_INCLUDE_DIR} ${ZLIB_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} )
+  target_link_libraries( server ${GMP_LIBRARIES} ${ZLIB_LIBRARIES} ${CURL_LIBRARIES} )
 
   # The following section finds the OPTIONAL dependencies and makes them available to the target
 
@@ -1663,6 +1703,17 @@ if( BUILD_SERVER )
     include_directories( ${LLVM_INCLUDE_DIR} )
     target_link_libraries( server ${LLVM_LIBS} )
   endif()
+
+  if( USE_SDL_ICONV )
+    find_package( SDL REQUIRED )
+    set_property( TARGET server APPEND PROPERTY COMPILE_DEFINITIONS HAVE_SDL )
+    include_directories( ${SDL_INCLUDE_DIR} )
+    target_link_libraries( server ${SDL_LIBRARY} )
+  else()
+    include_directories( ${ICONV_INCLUDE_DIR} )
+    target_link_libraries( client ${ICONV_LIBRARY} )
+  endif()
+
 endif()
 
 ###################
