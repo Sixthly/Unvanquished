@@ -72,7 +72,7 @@ find_package( ICONV )
 cmake_dependent_option( BUILD_CLIENT "Build Daemon client" 1
   "SDL_FOUND AND GMP_FOUND AND OPENGL_FOUND AND PNG_FOUND AND FREETYPE_FOUND" 0 )
 cmake_dependent_option( BUILD_SERVER "Build Daemonded server" 1
-  "GMP_FOUND AND ( ICONV_FOUND OR SDL_FOUND )" 0 )
+  "GMP_FOUND" 0 )
 option( GAME_LIB             "Build game logic libraries"                  1 )
 option( GAME_QVM             "Build game logic QVM files"                  1 )
 option( BUILD_DAEMONMAP      "Build Mapping tool"                          0 )
@@ -1708,7 +1708,7 @@ if( BUILD_SERVER )
     target_link_libraries( server ${SDL_LIBRARY} )
   else()
     include_directories( ${ICONV_INCLUDE_DIR} )
-    target_link_libraries( client ${ICONV_LIBRARY} )
+    target_link_libraries( server ${ICONV_LIBRARY} )
   endif()
 
 endif()
