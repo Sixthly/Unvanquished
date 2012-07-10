@@ -36,7 +36,7 @@ FIND_PATH(ICONV_INCLUDE_DIR iconv.h
  /usr/local/include
 )
 
-FIND_LIBRARY(ICONV_LIBRARY NAMES iconv libiconv libiconv2
+FIND_LIBRARY(ICONV_LIBRARY NAMES iconv libiconv libiconv2 libc
 PATHS
  /lib
  /usr/lib
