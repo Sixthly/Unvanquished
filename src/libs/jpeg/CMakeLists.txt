@@ -58,3 +58,6 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "RelWithDebInfo/${GAMELIB_OUT
 
 include_directories( ${JPEG_DIR}/include )
 add_library( INTERNAL_JPEG STATIC ${JPEGLIST} )
+if( NOT MSVC )
+  set_target_properties( INTERNAL_JPEG PROPERTIES COMPILE_FLAGS "-fPIC" )
+endif()
