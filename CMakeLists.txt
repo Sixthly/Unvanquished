@@ -674,13 +674,16 @@ set( CGAMEGPP_BASE
   ${GPP_DIR}/src/cgame/cg_tutorial.c
   ${GPP_DIR}/src/ui/ui_shared.c
   ${GPP_DIR}/src/ui/ui_utf8.c
-  ${MOUNT_DIR}/engine/qcommon/q_math.c
-  ${MOUNT_DIR}/engine/qcommon/q_shared.c
-)
+  ${MOUNT_DIR}/engine/qcommon/./q_math.c
+  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
+) # /./ - hack required if building both .bc and .so
 
 set( CGAMEGPP_SO
   ${CGAMEGPP_BASE}
   ${GPP_DIR}/src/cgame/cg_api.c
+)
+
+set( CGAMEGPP_DEF
   ${GPP_DIR}/src/cgame/cgame.def
 )
 
@@ -716,13 +719,16 @@ set( GAMEGPP_BASE
   ${GPP_DIR}/src/game/g_weapon.c
   ${GPP_DIR}/src/game/g_admin.c
   ${GPP_DIR}/src/game/g_namelog.c
-  ${MOUNT_DIR}/engine/qcommon/q_math.c
-  ${MOUNT_DIR}/engine/qcommon/q_shared.c
+  ${MOUNT_DIR}/engine/qcommon/./q_math.c
+  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
 )
 
 set( GAMEGPP_SO
   ${GAMEGPP_BASE}
   ${GPP_DIR}/src/game/g_api.c
+)
+
+set( GAMEGPP_DEF
   ${GPP_DIR}/src/game/game.def
 )
 
@@ -738,13 +744,16 @@ set( UIGPP_BASE
   ${GPP_DIR}/src/ui/ui_utf8.c
   ${GPP_DIR}/src/game/bg_misc.c
   ${GPP_DIR}/src/game/bg_lib.c
-  ${MOUNT_DIR}/engine/qcommon/q_math.c
-  ${MOUNT_DIR}/engine/qcommon/q_shared.c
+  ${MOUNT_DIR}/engine/qcommon/./q_math.c
+  ${MOUNT_DIR}/engine/qcommon/./q_shared.c
 )
 
 set( UIGPP_SO
   ${UIGPP_BASE}
   ${GPP_DIR}/src/ui/ui_api.c
+)
+
+set( UIGPP_DEF
   ${GPP_DIR}/src/ui/ui.def
 )
 
@@ -1136,7 +1145,7 @@ include( CMakeParseArguments )
 function( GAMELIB )
   # ParseArguments setup
   set( oneValueArgs LIB_NAME OUTPUT_NAME OUTPUT_DIR )
-  set( multiValueArgs COMPILE_DEF LIB_FILES QVM_FILES QVM_ASM )
+  set( multiValueArgs COMPILE_DEF LIB_FILES DEF_FILES QVM_FILES QVM_ASM )
   cmake_parse_arguments(GAMELIB "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
   if( GAME_LIB )
@@ -1155,7 +1164,7 @@ function( GAMELIB )
     if( GAME_LIB_LLVM )
       add_library( ${GAMELIB_LIB_NAME} SHARED ${GAMELIB_LIB_FILES} ${GAME_VM_COMMON} )
     else()
-      add_library( ${GAMELIB_LIB_NAME} SHARED ${GAMELIB_LIB_FILES} )
+      add_library( ${GAMELIB_LIB_NAME} SHARED ${GAMELIB_LIB_FILES} ${GAMELIB_DEF_FILES} )
     endif()
     if( NOT MSVC )
       target_link_libraries( ${GAMELIB_LIB_NAME} m )
@@ -1281,6 +1290,7 @@ GAMELIB( LIB_NAME gppgame
   OUTPUT_DIR main
   COMPILE_DEF GAME GAMEDLL GPP USE_REFENTITY_ANIMATIONSYSTEM
   LIB_FILES ${GAMEGPP_SO} ${GPP_DIR}
+  DEF_FILES ${GAMEGPP_DEF}
   QVM_FILES ${GAMEGPP_BASE}
   QVM_ASM ${GAMEGPP_QVM}
 )
@@ -1290,6 +1300,7 @@ GAMELIB( LIB_NAME gpptrem
   OUTPUT_DIR main
   COMPILE_DEF CGAME CGAMEDLL GPP USE_REFENTITY_ANIMATIONSYSTEM
   LIB_FILES ${CGAMEGPP_SO}
+  DEF_FILES ${CGAMEGPP_DEF}
   QVM_FILES ${CGAMEGPP_BASE}
   QVM_ASM ${CGAMEGPP_QVM}
 )
@@ -1299,6 +1310,7 @@ GAMELIB( LIB_NAME gppui
   OUTPUT_DIR main
   COMPILE_DEF UI UIDLL GPP USE_REFENTITY_ANIMATIONSYSTEM
   LIB_FILES ${UIGPP_SO}
+  DEF_FILES ${UIGPP_DEF}
   QVM_FILES ${UIGPP_BASE}
   QVM_ASM ${UIGPP_QVM}
 )

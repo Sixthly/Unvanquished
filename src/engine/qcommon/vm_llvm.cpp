@@ -160,7 +160,7 @@ void *VM_LoadLLVM( vm_t *vm, intptr_t (*systemcalls)(intptr_t, ...) ) {
 		 * its default to false at some point in the future.  */
 		engine = ExecutionEngine::create( module, false, &str, CodeGenOpt::Default, false );
 		if ( !engine ) {
-			Com_Printf_(("Couldn't create ExecutionEngine: %s\n"), str.c_str());
+			Com_Printf(_("Couldn't create ExecutionEngine: %s\n"), str.c_str());
 			return NULL;
 		}
 		engine->DisableSymbolSearching();
@@ -181,7 +181,7 @@ void *VM_LoadLLVM( vm_t *vm, intptr_t (*systemcalls)(intptr_t, ...) ) {
 	vm->entryPoint = fp;
 
 	if ( com_developer->integer ) {
-		Com_Printf_(("Loaded LLVM %s with module==%p\n"), name, module);
+		Com_Printf(_("Loaded LLVM %s with module==%p\n"), name, module);
 	}
 
 	return module;
