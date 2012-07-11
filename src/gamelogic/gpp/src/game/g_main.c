@@ -2426,20 +2426,20 @@ void CheckEmptyRules( void )
 {
 	char currentMap[ MAX_CVAR_VALUE_STRING ];
  
-	if( level.numConnectedClients != level.numVotingClients[ TEAM_NONE ] )
+	if ( level.numConnectedClients != level.numVotingClients[ TEAM_NONE ] )
 	{
 		// Wait until all players have entered the game.
 		return;
 	}
  
-	if( level.numConnectedClients == 0 &&
-	    level.emptyTime == 0 )
+	if ( level.numConnectedClients == 0 &&
+	     level.emptyTime == 0 )
 	{
 		// The level is empty.
 		level.emptyTime = level.time;
 	}
-	else if( level.numConnectedClients > 0 &&
-	         level.emptyTime != 0 )
+	else if ( level.numConnectedClients > 0 &&
+	          level.emptyTime != 0 )
 	{
 		// The level is no longer empty.
 		if ( g_restartForFirstPlayer.integer &&
@@ -2453,10 +2453,10 @@ void CheckEmptyRules( void )
 
 	trap_Cvar_VariableStringBuffer( "mapname", currentMap, sizeof( currentMap ) );
 
-	if( level.emptyTime > 0 &&
-	    ( level.time - level.emptyTime ) >= 60000 &&
-	    G_MapExists( g_emptyMap.string ) &&
-	    Q_stricmp( currentMap, g_emptyMap.string ) )
+	if ( level.emptyTime > 0 &&
+	     ( level.time - level.emptyTime ) >= 60000 &&
+	     G_MapExists( g_emptyMap.string ) &&
+	     Q_stricmp( currentMap, g_emptyMap.string ) )
 	{
 		// The level has been empty for 1 minute.
 		trap_SendConsoleCommand( EXEC_APPEND, va("map \"%s\"", g_emptyMap.string ) );
