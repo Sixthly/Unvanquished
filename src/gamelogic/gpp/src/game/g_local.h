@@ -708,6 +708,8 @@ typedef struct
 	buildLog_t       buildLog[ MAX_BUILDLOG ];
 	int              buildId;
 	int              numBuildLogs;
+
+	int              emptyTime;
 } level_locals_t;
 
 #define CMD_CHEAT        0x0001
@@ -1247,6 +1249,9 @@ extern  vmCvar_t g_censorship;
 
 extern  vmCvar_t g_showKillerHP;
 extern  vmCvar_t g_combatCooldown;
+
+extern  vmCvar_t  g_emptyMap;
+extern  vmCvar_t  g_restartForFirstPlayer;
 
 void             trap_Print( const char *fmt );
 void             trap_Error( const char *string ) NORETURN;

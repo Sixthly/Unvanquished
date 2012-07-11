@@ -183,6 +183,9 @@ vmCvar_t           g_tag;
 vmCvar_t           g_showKillerHP;
 vmCvar_t           g_combatCooldown;
 
+vmCvar_t           g_emptyMap;
+vmCvar_t           g_restartForFirstPlayer;
+
 // copy cvars that can be set in worldspawn so they can be restored later
 static char        cv_gravity[ MAX_CVAR_VALUE_STRING ];
 static char        cv_humanMaxStage[ MAX_CVAR_VALUE_STRING ];
@@ -348,7 +351,9 @@ static cvarTable_t gameCvarTable[] =
 	{ &g_tag,                         "g_tag",                         "gpp",                              CVAR_INIT,                                       0, qfalse           },
 
 	{ &g_showKillerHP,                "g_showKillerHP",                "0",                                CVAR_ARCHIVE,                                    0, qfalse           },
-	{ &g_combatCooldown,              "g_combatCooldown",              "15",                               CVAR_ARCHIVE,                                    0, qfalse           }
+	{ &g_combatCooldown,              "g_combatCooldown",              "15",                               CVAR_ARCHIVE,                                    0, qfalse           },
+	{ &g_emptyMap,                    "g_emptyMap",                    "",                                 CVAR_ARCHIVE,                                    0, qfalse           },
+	{ &g_restartForFirstPlayer,       "g_restartForFirstPlayer",       "0",                                CVAR_ARCHIVE,                                    0, qfalse           }
 };
 
 static int         gameCvarTableSize = ARRAY_LEN( gameCvarTable );
@@ -357,6 +362,7 @@ void               G_InitGame( int levelTime, int randomSeed, int restart );
 void               G_RunFrame( int levelTime );
 void               G_ShutdownGame( int restart );
 void               CheckExitRules( void );
+void               CheckEmptyRules( void );
 
 void               G_CountSpawns( void );
 void               G_CalculateBuildPoints( void );
@@ -1889,7 +1895,11 @@ void ExitLevel( void )
 	int       i;
 	gclient_t *cl;
 
-	if ( G_MapExists( g_nextMap.string ) )
+	if ( level.numConnectedClients == 0 && G_MapExists( g_emptyMap.string ) )
+	{
+		trap_SendConsoleCommand( EXEC_APPEND, va("map \"%s\"\n", g_emptyMap.string ) );
+	}
+	else if ( G_MapExists( g_nextMap.string ) )
 	{
 		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", Quote( g_nextMap.string ) ) );
 
@@ -2405,6 +2415,55 @@ void CheckExitRules( void )
 }
 
 /*
+=================
+CheckEmptyRules
+ 
+Change to the map "g_emptyMap" if the server is empty.
+Restart the map if the server was empty for "g_restartForFirstPlayer" seconds and a player has connected.
+=================
+*/
+void CheckEmptyRules( void )
+{
+	char currentMap[ MAX_CVAR_VALUE_STRING ];
+ 
+	if( level.numConnectedClients != level.numVotingClients[ TEAM_NONE ] )
+	{
+		// Wait until all players have entered the game.
+		return;
+	}
+ 
+	if( level.numConnectedClients == 0 &&
+	    level.emptyTime == 0 )
+	{
+		// The level is empty.
+		level.emptyTime = level.time;
+	}
+	else if( level.numConnectedClients > 0 &&
+	         level.emptyTime != 0 )
+	{
+		// The level is no longer empty.
+		if ( g_restartForFirstPlayer.integer &&
+		     level.time - level.emptyTime >= g_restartForFirstPlayer.integer * 1000 )
+		{
+		  trap_SendConsoleCommand( EXEC_APPEND, "map_restart" );
+		}
+
+		level.emptyTime = 0;
+	}
+
+	trap_Cvar_VariableStringBuffer( "mapname", currentMap, sizeof( currentMap ) );
+
+	if( level.emptyTime > 0 &&
+	    ( level.time - level.emptyTime ) >= 60000 &&
+	    G_MapExists( g_emptyMap.string ) &&
+	    Q_stricmp( currentMap, g_emptyMap.string ) )
+	{
+		// The level has been empty for 1 minute.
+		trap_SendConsoleCommand( EXEC_APPEND, va("map \"%s\"", g_emptyMap.string ) );
+	}
+}
+
+/*
 ==================
 G_Vote
 ==================
@@ -2886,6 +2945,9 @@ void G_RunFrame( int levelTime )
 
 	// update to team status?
 	CheckTeamStatus();
+
+	// restart if the server is empty, or was empty and a player has connected
+	CheckEmptyRules( );
 
 	// cancel vote if timed out
 	for ( i = 0; i < NUM_TEAMS; i++ )
